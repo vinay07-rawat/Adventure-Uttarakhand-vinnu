@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="hi" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devbhoomi: Mystical Uttarakhand Portal</title>
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* ========================================================
+           LIGHT & DARK THEME VARIABLES (MAGICAL GLASSMORPHISM)
+           ======================================================== */
+        :root {
+            /* DARK THEME DEFAULTS */
+            --bg-base: #02050a;
+            --primary-glow: #00f2fe;
+            --secondary-glow: #4facfe;
+            --accent-pink: #ff0844;
+            --text-main: #ffffff;
+            --text-muted: #cbd5e1;
+            --glass-bg: rgba(10, 15, 30, 0.55); 
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --neon-shadow: 0 0 20px rgba(0, 242, 254, 0.6);
+            --overlay-color: radial-gradient(circle, rgba(2,5,10,0.4) 0%, rgba(2,5,10,0.85) 100%);
+            --sidebar-width: 320px;
+        }
+
+        [data-theme="light"] {
+            /* LIGHT THEME VARIABLES */
+            --bg-base: #f1f5f9;
+            --primary-glow: #0284c7;
+            --secondary-glow: #0ea5e9;
+            --accent-pink: #e11d48;
+            --text-main: #0f172a;
+            --text-muted: #334155;
+            --glass-bg: rgba(255, 255, 255, 0.75); 
+            --glass-border: rgba(0, 0, 0, 0.15);
+            --neon-shadow: 0 5px 15px rgba(2, 132, 199, 0.3);
+            --overlay-color: radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(241,245,249,0.85) 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { color: var(--text-main); overflow-x: hidden; background-color: var(--bg-base); transition: 0.5s ease; }
+
+        /* ========================================================
+           DYNAMIC MOUNTAIN/NATURE BACKGROUND (SLIDESHOW)
+           ======================================================== */
+        .bg-slider { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2; }
+        .bg-slider .slide {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover; background-position: center;
+            opacity: 0; animation: fadeBackground 24s infinite;
+        }
+        .bg-slider .slide:nth-child(1) { background-image: url('https://images.unsplash.com/photo-1626714486984-7a32d16eb71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'); animation-delay: 0s; }
+        .bg-slider .slide:nth-child(2) { background-image: url('https://images.unsplash.com/photo-1589553416260-f5875c1f7158?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'); animation-delay: 6s; }
+        .bg-slider .slide:nth-child(3) { background-image: url('https://images.unsplash.com/photo-1547452377-b2ac40e02ed6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'); animation-delay: 12s; }
+        .bg-slider .slide:nth-child(4) { background-image: url('https://images.unsplash.com/photo-1610715936287-6c2ab208cbbf?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'); animation-delay: 18s; }
+
+        @keyframes fadeBackground { 0% {opacity:0; transform:scale(1);} 10% {opacity:1;} 25% {opacity:1;} 35% {opacity:0; transform:scale(1.05);} 100% {opacity:0;} }
+        .bg-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--overlay-color); z-index: -1; backdrop-filter: blur(4px); transition: 0.5s ease; }
+
+        /* ========================================================
+           HEADER: TOP-LEFT HAMBURGER & THEME TOGGLE
+           ======================================================== */
+        header {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+            background: var(--glass-bg); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border); padding: 15px 30px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.3); transition: 0.5s ease;
+        }
+
+        .header-left { display: flex; align-items: center; gap: 20px; }
+        
+        .menu-btn { font-size: 32px; cursor: pointer; color: var(--text-main); transition: 0.3s; line-height: 1; }
+        .menu-btn:hover { color: var(--primary-glow); text-shadow: var(--neon-shadow); transform: scale(1.1); }
+
+        .theme-btn { font-size: 26px; cursor: pointer; background: none; border: none; outline: none; transition: 0.3s; }
+        .theme-btn:hover { transform: scale(1.2) rotate(15deg); }
+
+        .logo { font-size: 1.6rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; color: var(--text-main); text-align: right;}
+        .logo span { background: linear-gradient(45deg, var(--primary-glow), var(--accent-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* ========================================================
+           LEFT SIDEBAR (OVERLAY STYLE - NO LAYOUT SHIFT)
+           ======================================================== */
+        .sidebar {
+            position: fixed; top: 0; left: -350px; width: var(--sidebar-width); height: 100vh;
+            background: var(--glass-bg); backdrop-filter: blur(35px);
+            border-right: 1px solid var(--glass-border); display: flex; flex-direction: column;
+            padding: 80px 20px 30px 20px; z-index: 1001; transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 5px 0 30px rgba(0,0,0,0.5); overflow-y: auto;
+        }
+        .sidebar.active { left: 0; }
+
+        .sidebar nav { display: flex; flex-direction: column; gap: 12px; }
+        .sidebar nav a {
+            color: var(--text-main); text-decoration: none; font-size: 1.1rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 1px; padding: 15px 20px; border-radius: 10px;
+            transition: 0.4s ease; border: 1px solid transparent; display: flex; align-items: center; gap: 10px; cursor: pointer;
+        }
+        .sidebar nav a:hover {
+            color: var(--primary-glow); background: rgba(0, 242, 254, 0.1);
+            border: 1px solid var(--primary-glow); box-shadow: var(--neon-shadow); transform: translateX(5px);
+        }
+
+        /* Sidebar Search Box */
+        .sidebar-search { margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--glass-border); }
+        .sidebar-search input, .sidebar-search select {
+            width: 100%; padding: 12px 15px; margin-bottom: 12px; border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.3); background: rgba(0,0,0,0.4); color: white;
+            font-size: 0.95rem; outline: none; transition: 0.3s;
+        }
+        .sidebar-search input:focus, .sidebar-search select:focus {
+            border-color: var(--primary-glow); box-shadow: var(--neon-shadow); background: rgba(0, 242, 254, 0.1);
+        }
+
+        /* Backdrop overlay for sidebar */
+        .sidebar-backdrop { display: none; position: fixed; top:0; left:0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 999; }
+        .sidebar-backdrop.active { display: block; }
+
+        /* ========================================================
+           MAIN CONTENT AREA
+           ======================================================== */
+        main { padding-top: 80px; position: relative; z-index: 1; }
+
+        /* HERO & ADVANCED SEARCH */
+        #hero { text-align: center; padding: 60px 20px 40px 20px; }
+        #hero h2 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 900; margin-bottom: 20px; text-shadow: 0 5px 15px rgba(0,0,0,0.4); }
+        #hero h2 span { background: linear-gradient(45deg, var(--primary-glow), var(--secondary-glow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        #hero p { font-size: clamp(1rem, 2vw, 1.4rem); color: var(--text-muted); max-width: 800px; margin: 0 auto; font-weight: 500; }
+
+        /* STATS RIBBON */
+        .stats-ribbon { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 40px; }
+        .stat-box { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 20px; border-radius: 12px; backdrop-filter: blur(15px); transition: 0.3s; flex: 1; min-width: 220px; max-width: 300px;}
+        .stat-box:hover { transform: translateY(-5px); border-color: var(--accent-pink); box-shadow: 0 10px 20px rgba(254, 9, 121, 0.2); }
+        .stat-box h4 { font-size: 2rem; color: var(--accent-pink); margin-bottom: 5px; text-shadow: 0 0 10px rgba(254,9,121,0.3); }
+        .stat-box p { font-size: 0.95rem; text-transform: uppercase; font-weight: bold; color: var(--text-muted); }
+
+        /* ========================================================
+           GALLERY & LOCATION BLOCKS (GLASSMORPHISM)
+           ======================================================== */
+        section { padding: 60px 20px; max-width: 1400px; margin: 0 auto; }
+        .section-title { font-size: clamp(2rem, 4vw, 2.8rem); color: var(--text-main); margin-bottom: 50px; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 5px 15px rgba(0,0,0,0.2); text-align: center; }
+        .section-title span { color: var(--primary-glow); }
+
+        .location-block { margin-bottom: 80px; }
+        .location-heading { font-size: clamp(1.5rem, 3vw, 2rem); color: var(--text-main); margin-bottom: 25px; display: inline-flex; align-items: center; gap: 15px; cursor: pointer; transition: 0.4s ease; border-bottom: 2px solid transparent; padding-bottom: 5px; }
+        .location-heading:hover { color: var(--primary-glow); border-bottom: 2px solid var(--primary-glow); transform: translateX(10px); }
+        
+        .image-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .image-card { position: relative; height: 200px; border-radius: 12px; overflow: hidden; border: 1px solid var(--glass-border); background: var(--glass-bg); backdrop-filter: blur(10px); cursor: pointer; transition: 0.5s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .image-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease; filter: brightness(0.9); }
+        .image-card:hover img { transform: scale(1.15) rotate(2deg); filter: brightness(1.1); }
+        .image-card:hover { border-color: var(--primary-glow); box-shadow: var(--neon-shadow); transform: translateY(-10px); z-index: 10; }
+
+        /* MASTER DATABASE TABLE */
+        .table-wrapper { background: var(--glass-bg); backdrop-filter: blur(25px); border-radius: 20px; padding: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.4); border: 1px solid var(--glass-border); overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 900px; text-align: left; }
+        th { padding: 15px; color: var(--primary-glow); border-bottom: 2px solid var(--accent-pink); font-size: 1.05rem; text-transform: uppercase; background: rgba(0,0,0,0.1); }
+        td { padding: 15px; border-bottom: 1px solid var(--glass-border); color: var(--text-main); font-size: 1rem; }
+        tbody tr { transition: 0.3s; }
+        tbody tr:hover { background-color: var(--glass-bg); transform: scale(1.01); box-shadow: inset 5px 0 0 var(--primary-glow); }
+        .clickable-location { color: var(--primary-glow); font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .clickable-location:hover { color: var(--accent-pink); }
+
+        /* DASHBOARD & ABOUT CARDS */
+        .dashboard-grid, .about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .chart-card, .about-card { background: var(--glass-bg); backdrop-filter: blur(25px); padding: 30px; border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: 0 10px 40px rgba(0,0,0,0.3); transition: 0.5s; }
+        .chart-card:hover, .about-card:hover { border-color: var(--primary-glow); box-shadow: var(--neon-shadow); transform: translateY(-5px); }
+        .chart-card h3, .about-card h3 { color: var(--text-main); margin-bottom: 20px; font-size: 1.6rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px; }
+        .chart-card h3 span, .about-card h3 span { color: var(--primary-glow); }
+        .about-card p { color: var(--text-muted); margin-bottom: 15px; font-size: 1.05rem; line-height: 1.7; text-align: justify; }
+
+        /* CONTACT & BOOKING FORM */
+        .contact-buttons { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+        .contact-buttons a { display: block; padding: 15px; border-radius: 8px; text-decoration: none; color: white; font-weight: bold; font-size: 1.05rem; transition: 0.4s; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.5); text-align: center; }
+        .contact-buttons a.wa-btn:hover { background: #25D366; border-color: #25D366; box-shadow: 0 0 15px #25D366; }
+        .contact-buttons a.call-btn:hover { background: #00f2fe; border-color: #00f2fe; color: black; box-shadow: 0 0 15px #00f2fe; }
+        .contact-buttons a.email-btn:hover { background: #ea4335; border-color: #ea4335; box-shadow: 0 0 15px #ea4335; }
+        
+        .social-icons { display: flex; gap: 15px; margin-top: 20px; justify-content: center; }
+        .social-icons a { width: 45px; height: 45px; border-radius: 50%; display: flex; justify-content: center; align-items: center; background: rgba(0,0,0,0.6); border: 1px solid var(--glass-border); color: var(--primary-glow); font-weight: bold; text-decoration: none; transition: 0.4s; }
+        .social-icons a:hover { background: var(--primary-glow); color: black; box-shadow: var(--neon-shadow); transform: scale(1.1); }
+
+        .contact-form input, .contact-form textarea, .contact-form select { width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(0,0,0,0.5); color: white; font-size: 1rem; transition: 0.4s; outline: none; }
+        .contact-form input:focus, .contact-form textarea:focus, .contact-form select:focus { border-color: var(--primary-glow); box-shadow: var(--neon-shadow); background: rgba(0, 242, 254, 0.15); }
+        .contact-form option { background: #02050a; color: white; }
+        
+        .form-row { display: flex; gap: 10px; flex-wrap: wrap; }
+        .form-row input { flex: 1; min-width: 120px; }
+
+        .contact-form button { width: 100%; padding: 18px; background: linear-gradient(45deg, #25D366, #128C7E); color: #fff; border: none; font-weight: bold; font-size: 1.1rem; border-radius: 8px; cursor: pointer; transition: 0.4s; text-transform: uppercase; letter-spacing: 1px; }
+        .contact-form button:hover { box-shadow: 0 0 20px rgba(37, 211, 102, 0.7); transform: translateY(-3px); }
+
+        /* ========================================================
+           MODALS (HISTORY & IMAGES) MOBILE OPTIMIZED
+           ======================================================== */
+        .modal-overlay { display: none; position: fixed; z-index: 4000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); overflow-y: auto; padding: 20px 0; }
+        .info-modal-content { background: var(--glass-bg); margin: 0 auto; padding: 40px; border-radius: 15px; border: 1px solid var(--primary-glow); width: 92%; max-width: 900px; position: relative; box-shadow: var(--neon-shadow); animation: slideDown 0.5s ease; backdrop-filter: blur(30px); }
+        @keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        .info-modal-content h2 { color: var(--primary-glow); margin-bottom: 30px; font-size: clamp(2rem, 5vw, 3rem); border-bottom: 2px solid var(--accent-pink); padding-bottom: 15px; }
+        .history-section { margin-bottom: 25px; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 12px; border-left: 4px solid var(--primary-glow); }
+        .history-section h4 { color: var(--text-main); font-size: 1.2rem; margin-bottom: 10px; text-transform: uppercase; }
+        .history-section p { font-size: 1.05rem; line-height: 1.8; color: var(--text-muted); text-align: justify; }
+
+        .close-btn { position: absolute; top: 15px; right: 25px; font-size: 40px; color: var(--accent-pink); cursor: pointer; transition: 0.4s; }
+        .close-btn:hover { color: white; text-shadow: 0 0 20px var(--accent-pink); transform: rotate(90deg) scale(1.1); }
+
+        .image-modal-content { margin: 10% auto; display: block; max-width: 95%; max-height: 80vh; border: 2px solid var(--primary-glow); border-radius: 10px; box-shadow: var(--neon-shadow); }
+        .img-close-btn { position: fixed; top: 20px; right: 20px; color: white; font-size: 35px; cursor: pointer; z-index: 4001; background: var(--accent-pink); padding: 5px 20px; border-radius: 8px; transition: 0.4s; }
+        .img-close-btn:hover { background: white; color: var(--accent-pink); box-shadow: 0 0 20px var(--accent-pink); }
+
+        footer { background: var(--glass-bg); backdrop-filter: blur(10px); text-align: center; padding: 30px 20px; border-top: 1px solid var(--glass-border); margin-top: 50px; }
+        
+        /* MOBILE RESPONSIVE TWEAKS */
+        @media screen and (max-width: 768px) {
+            header { padding: 15px 20px; }
+            .logo { font-size: 1.3rem; }
+            .info-modal-content { padding: 25px; }
+            .close-btn { right: 15px; top: 10px; }
+            .stat-box { min-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. MAGICAL DYNAMIC BACKGROUND -->
+    <div class="bg-slider">
+        <div class="slide"></div>
+        <div class="slide"></div>
+        <div class="slide"></div>
+        <div class="slide"></div>
+    </div>
+    <div class="bg-overlay"></div>
+
+    <!-- 2. TOP HEADER (HAMBURGER + THEME TOGGLE + LOGO) -->
+    <header id="main-header">
+        <div class="header-left">
+            <span class="menu-btn" onclick="openNav()">&#9776;</span>
+            <button class="theme-btn" onclick="toggleTheme()" id="themeIcon" title="Toggle Light/Dark Theme">☀️</button>
+        </div>
+        <div class="logo">Explore <span>Uttarakhand</span></div>
+    </header>
+
+    <!-- 3. FIXED LEFT SIDEBAR (OVERLAY DESIGN) -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeNav()"></div>
+    <aside class="sidebar" id="mySidebar">
+        <nav>
+            <a onclick="scrollToSection(event, 'hero')">✦ Home Base</a>
+            <a onclick="scrollToSection(event, 'gallery')">✦ Visual Gallery</a>
+            <a onclick="scrollToSection(event, 'master-data')">✦ Data Matrix</a>
+            <a onclick="scrollToSection(event, 'dashboard')">✦ Visual Analytics</a>
+            <a onclick="scrollToSection(event, 'about')">✦ About Us</a>
+            <a onclick="scrollToSection(event, 'contact')">✦ Connect / Booking</a>
+        </nav>
+
+        <!-- Advanced Search Box in Sidebar -->
+        <div class="sidebar-search">
+            <h4 style="color:var(--text-muted); margin-bottom:10px; font-size:0.9rem; text-transform:uppercase;">Data Deep Search</h4>
+            <input type="text" id="searchInput" placeholder="Search (Nainital, Profit, Snow)..." onkeyup="filterGallery()">
+            <select id="seasonFilter" onchange="filterGallery()">
+                <option value="all">All Seasons</option>
+                <option value="summer">Summer Economy</option>
+                <option value="winter">Winter Economy</option>
+            </select>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <!-- HERO SECTION -->
+        <section id="hero">
+            <h2>Discover Devbhoomi<br><span>Analytics & Heritage</span></h2>
+            <p>A fusion of breathtaking nature and raw data. Uncovering the historical evolution, local economy, and hidden potentials of Uttarakhand.</p>
+            
+            <div class="stats-ribbon">
+                <div class="stat-box">
+                    <h4>₹500Cr+</h4>
+                    <p>Tourism Economy</p>
+                </div>
+                <div class="stat-box">
+                    <h4>1.5Lakh+</h4>
+                    <p>Local Businesses</p>
+                </div>
+                <div class="stat-box">
+                    <h4>22 Major</h4>
+                    <p>Monitored Hubs</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. VISUAL GALLERY (ALL 22 LOCATIONS - UNABRIDGED) -->
+        <section id="gallery">
+            <h2 class="section-title">Visual <span>Assets</span></h2>
+            
+            <!-- 1. Nainital -->
+            <div class="location-block" data-name="नैनीताल nainital lakes boating naini turnover economy profit small business employment hotel revenue" data-season="summer">
+                <h3 class="location-heading" onclick="openInfoModal('nainital')">1. नैनीताल</h3>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openImgModal('nainital1.jpeg')"><img src="nainital1.jpeg" alt="नैनीताल"></div>
+                    <div class="image-card" onclick="openImgModal('nainital2.jpeg')"><img src="nainital2.jpeg" alt="नैनीताल"></div>
+                    <div class="image-card" onclick="openImgModal('nainital3.jpeg')"><img src="nainital3.jpeg" alt="नैनीताल"></div>
+                    <div class="image-card" onclick="openImgModal('nainital4.jpeg')"><img src="nainital4.jpeg" alt="नैनीताल"></div>
+                    <div class="image-card" onclick="openImgModal('nainital5.jpeg')"><img src="nainital5.jpeg" alt="नैनीताल"></div>
+                    <div class="image-card" onclick="openImgModal('nainital6.jpeg')"><img src="nainital6.jpeg" alt="नैनीताल"></div>
+                </div>
+            </div>
+
+            <!-- 2. Mussoorie -->
+            <div class="location-block" data-name="मसूरी mussoorie hills queen kempty turnover luxury resorts small business profit taxi" data-season="summer">
+                <h3 class="location-heading" onclick="openInfoModal('mussoorie')">2. मसूरी</h3>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openImgModal('mussoorie1.jpeg')"><img src="mussoorie1.jpeg" alt="मसूरी"></div>
+                    <div class="image-card" onclick="openImgModal('mussoorie2.jpeg')"><img src="mussoorie2.jpeg" alt="मसूरी"></div>
+                    <div class="image-card" onclick="openImgModal('mussoorie3.jpeg')"><img src="mussoorie3.jpeg" alt="मसूरी"></div>
+                    <div class="image-card" onclick="openImgModal('mussoorie4.jpeg')"><img src="mussoorie4.jpeg" alt="मसूरी"></div>
+                    <div class="image-card" onclick="openImgModal('mussoorie5.jpeg')"><img src="mussoorie5.jpeg" alt="मसूरी"></div>
+                    <div class="image-card" onclick="openImgModal('mussoorie6.jpeg')"><img src="mussoorie6.jpeg" alt="मसूरी"></div>
+                </div>
+            </div>
+
+            <!-- 3. Nelong Valley -->
+            <div class="location-block" data-name="नेलांग वैली nelong uttarkashi border permit revenue rare exclusive adventure profit" data-season="summer">
+                <h3 class="location-heading" onclick="openInfoModal('nelong')">3. नेलांग वैली</h3>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjYRO_sRiiPxafQmT6Xb5gJPR0Vdb23Uafrqo4APzDxcz3x7mihMKU4iO4&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjYRO_sRiiPxafQmT6Xb5gJPR0Vdb23Uafrqo4APzDxcz3x7mihMKU4iO4&s=10" alt="नेलांग"></div>
+                    <div class="image-card" onclick="openImgModal('https://himalayandreamtreks.in/wp-content/uploads/2024/06/Nelong-1.webp')"><img src="https://himalayandreamtreks.in/wp-content/uploads/2024/06/Nelong-1.webp" alt="नेलांग"></div>
+                    <div class="image-card" onclick="openImgModal('https://hike2heaven.com/wp-content/uploads/2026/04/nelong-valley-gallery-02.jpg')"><img src="https://hike2heaven.com/wp-content/uploads/2026/04/nelong-valley-gallery-02.jpg" alt="नेलांग"></div>
+                    <div class="image-card" onclick="openImgModal('https://i.pinimg.com/736x/91/e1/6c/91e16c5d2edc23b4c9c178342b9c4222.jpg')"><img src="https://i.pinimg.com/736x/91/e1/6c/91e16c5d2edc23b4c9c178342b9c4222.jpg" alt="नेलांग"></div>
+                    <div class="image-card" onclick="openImgModal('https://travelvaidya.com/wp-content/uploads/2025/05/32-2.webp')"><img src="https://travelvaidya.com/wp-content/uploads/2025/05/32-2.webp" alt="नेलांग"></div>
+                </div>
+            </div>
+
+            <!-- 4. Munsyari -->
+            <div class="location-block" data-name="मुनस्यारी munsyari pithoragarh homestay local business weavers employment profit" data-season="summer">
+                <h3 class="location-heading" onclick="openInfoModal('munsyari')">4. मुनस्यारी</h3>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqN99dAsnrA5CJZrSUx7heu_cWnxXn5xi8zQ-b8ZboaTbSdd-Z2dLW2u4&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqN99dAsnrA5CJZrSUx7heu_cWnxXn5xi8zQ-b8ZboaTbSdd-Z2dLW2u4&s=10" alt="मुनस्यारी"></div>
+                    <div class="image-card" onclick="openImgModal('https://nagarjunatravels.com/images/post-images/1761556557.webp')"><img src="https://nagarjunatravels.com/images/post-images/1761556557.webp" alt="मुनस्यारी"></div>
+                    <div class="image-card" onclick="openImgModal('https://storage.googleapis.com/stateless-www-justwravel-com/2024/11/251badac-munsiyari-mountains.jpg')"><img src="https://storage.googleapis.com/stateless-www-justwravel-com/2024/11/251badac-munsiyari-mountains.jpg" alt="मुनस्यारी"></div>
+                    <div class="image-card" onclick="openImgModal('https://media.moxtain.com/blogs/BestPlacesToVisitInMunsiyari/576/Munsiyari-Village.webp')"><img src="https://media.moxtain.com/blogs/BestPlacesToVisitInMunsiyari/576/Munsiyari-Village.webp" alt="मुनस्यारी"></div>
+                    <div class="image-card" onclick="openImgModal('https://storage.googleapis.com/stateless-www-justwravel-com/2024/11/1e5a4e2c-nanda-devi-temple-munsiyari.jpg')"><img src="https://storage.googleapis.com/stateless-www-justwravel-com/2024/11/1e5a4e2c-nanda-devi-temple-munsiyari.jpg" alt="मुनस्यारी"></div>
+                </div>
+            </div>
+
+            <!-- 5. Chopta -->
+            <div class="location-block" data-name="चोपता chopta rudraprayag snow trek tents small business profit turnover local employment" data-season="winter">
+                <h3 class="location-heading" onclick="openInfoModal('chopta')">5. चोपता</h3>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRj8bGtH9iU4sWjkBmJexr03DEqZCdRDqUNh8OV0qMjYSE9yw3wCqoADMlE&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRj8bGtH9iU4sWjkBmJexr03DEqZCdRDqUNh8OV0qMjYSE9yw3wCqoADMlE&s=10" alt="चोपता"></div>
+                    <div class="image-card" onclick="openImgModal('https://uttarakhandtourism.gov.in/assets/media/UTDB_media_logo1745916342a5160ff72b8591a242f1fe76dc5fe7f3.jpg')"><img src="https://uttarakhandtourism.gov.in/assets/media/UTDB_media_logo1745916342a5160ff72b8591a242f1fe76dc5fe7f3.jpg" alt="चोपता"></div>
+                    <div class="image-card" onclick="openImgModal('https://media.istockphoto.com/id/614632572/photo/chopta-valley-in-north-sikkim-india.jpg?s=612x612&w=0&k=20&c=q4PmE01HxRQ1B_MpSccY3oa406K8bvcPVdhop5gk8YI=')"><img src="https://media.istockphoto.com/id/614632572/photo/chopta-valley-in-north-sikkim-india.jpg?s=612x612&w=0&k=20&c=q4PmE01HxRQ1B_MpSccY3oa406K8bvcPVdhop5gk8YI=" alt="चोपता"></div>
+                    <div class="image-card" onclick="openImgModal('https://www.chopta.in/wp-content/uploads/2019/07/Mayadee-Hotel-chopta.jpg')"><img src="https://www.chopta.in/wp-content/uploads/2019/07/Mayadee-Hotel-chopta.jpg" alt="चोपता"></div>
+                    <div class="image-card" onclick="openImgModal('https://images.unsplash.com/photo-1547452377-b2ac40e02ed6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Y2hvcHRhJTIwdHVuZ25hdGglMjBjaGFuZHJhc2hpbGElMjB0cmVra2luZ3xlbnwwfHwwfHx8MA%3D%3D')"><img src="https://images.unsplash.com/photo-1547452377-b2ac40e02ed6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Y2hvcHRhJTIwdHVuZ25hdGglMjBjaGFuZHJhc2hpbGElMjB0cmVra2luZ3xlbnwwfHwwfHx8MA%3D%3D" alt="चोपता"></div>
+                </div>
+            </div>
+
+            <!-- 6. Khirsu -->
+            <div class="location-block" data-name="खिरसू khirsu pauri agri tourism small business rural profit" data-season="summer">
+                <h3 class="location-heading" onclick="openInfoModal('khirsu')">6. खिरसू</h3>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpsjWVEMHSk3qjttDLKzOalABOssXudYENAoAQDUR_1r-Kt6vNW79Xq0M&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpsjWVEMHSk3qjttDLKzOalABOssXudYENAoAQDUR_1r-Kt6vNW79Xq0M&s=10" alt="खिरसू"></div>
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSFIIsTW6n72x5WdhwYftClqqaXogQHu1tVnvgRLbgSoi16DhzfvK8WBw&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSFIIsTW6n72x5WdhwYftClqqaXogQHu1tVnvgRLbgSoi16DhzfvK8WBw&s=10" alt="खिरसू"></div>
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBzaxi71Zo22P3aFkoktmpGP-eo8GLa5ca5wVZGUrdTHTPwY9FQtJvkZos&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBzaxi71Zo22P3aFkoktmpGP-eo8GLa5ca5wVZGUrdTHTPwY9FQtJvkZos&s=10" alt="खिरसू"></div>
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaPhLGs_PiY1WHwcNH_CF37bESbg0GcCGdzhoB4Fxlh3y5P4-y5WytRu8&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaPhLGs_PiY1WHwcNH_CF37bESbg0GcCGdzhoB4Fxlh3y5P4-y5WytRu8&s=10" alt="खिरसू"></div>
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqN99dAsnrA5CJZrSUx7heu_cWnxXn5xi8zQ-b8ZboaTbSdd-Z2dLW2u4&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqN99dAsnrA5CJZrSUx7heu_cWnxXn5xi8zQ-b8ZboaTbSdd-Z2dLW2u4&s=10" alt="खिरसू"></div>
+                </div>
+            </div>
+
+            <!-- 7. Kanatal -->
+            <div class="location-block" data-name="कनाताल kanatal tehri camping luxury eco tourism business turnover high profit" data-season="summer">
+                <h3 class="location-heading" onclick="openInfoModal('kanatal')">7. कनाताल</h3>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0T0YTL9YzluMwj7jMhPCb--WRZlKrhXTcwi4_a52R72cdSq8Q1toSExM&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0T0YTL9YzluMwj7jMhPCb--WRZlKrhXTcwi4_a52R72cdSq8Q1toSExM&s=10" alt="कनाताल"></div>
+                    <div class="image-card" onclick="openImgModal('https://cf.bstatic.com/xdata/images/hotel/max1024x768/551870856.jpg?k=d9576a402e24aa6917413098530dba9102e4ca3cab6fd2a3432a31e7a04673b5&o=')"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/551870856.jpg?k=d9576a402e24aa6917413098530dba9102e4ca3cab6fd2a3432a31e7a04673b5&o=" alt="कनाताल"></div>
+                    <div class="image-card" onclick="openImgModal('https://content.jdmagicbox.com/v2/comp/tehri-garhwal/l7/9999p1376.1376.240701122725.c2l7/catalogue/surkanda-kanatal-view-camps-barwal-gaon-tehri-garhwal-camp-organisers-bpzpukwlj7.jpg')"><img src="https://content.jdmagicbox.com/v2/comp/tehri-garhwal/l7/9999p1376.1376.240701122725.c2l7/catalogue/surkanda-kanatal-view-camps-barwal-gaon-tehri-garhwal-camp-organisers-bpzpukwlj7.jpg" alt="कनाताल"></div>
+                    <div class="image-card" onclick="openImgModal('https://c.ndtvimg.com/2025-02/0fquvrj_mn_625x300_28_February_25.jpg')"><img src="https://c.ndtvimg.com/2025-02/0fquvrj_mn_625x300_28_February_25.jpg" alt="कनाताल"></div>
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_f0JdxSYr9Z4r7Ow2ngwLS3znGELV_EDAHLC67cL7QcG_dFxUbfnbbPc&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_f0JdxSYr9Z4r7Ow2ngwLS3znGELV_EDAHLC67cL7QcG_dFxUbfnbbPc&s=10" alt="कनाताल"></div>
+                </div>
+            </div>
+
+            <!-- 8. Mukteshwar -->
+            <div class="location-block" data-name="मुक्तेश्वर mukteshwar nainital apple orchards boutique business profit rural turnover" data-season="summer">
+                <h3 class="location-heading" onclick="openInfoModal('mukteshwar')">8. मुक्तेश्वर</h3>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openImgModal('https://cf.bstatic.com/xdata/images/hotel/max1024x768/514695901.jpg?k=0f5b291fa8add38b8d25d1a34590b93341dcad4bec0d6044b6b55211dad4500d&o=')"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/514695901.jpg?k=0f5b291fa8add38b8d25d1a34590b93341dcad4bec0d6044b6b55211dad4500d&o=" alt="मुक्तेश्वर"></div>
+                    <div class="image-card" onclick="openImgModal('https://www.justahotels.com/wp-content/uploads/2022/10/cover-2-mukteshwar.png')"><img src="https://www.justahotels.com/wp-content/uploads/2022/10/cover-2-mukteshwar.png" alt="मुक्तेश्वर"></div>
+                    <div class="image-card" onclick="openImgModal('https://images.travelandleisureasia.com/wp-content/uploads/sites/2/2023/06/29112201/Mukteshwar-1600x900.jpg')"><img src="https://images.travelandleisureasia.com/wp-content/uploads/sites/2/2023/06/29112201/Mukteshwar-1600x900.jpg" alt="मुक्तेश्वर"></div>
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRj8bGtH9iU4sWjkBmJexr03DEqZCdRDqUNh8OV0qMjYSE9yw3wCqoADMlE&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRj8bGtH9iU4sWjkBmJexr03DEqZCdRDqUNh8OV0qMjYSE9yw3wCqoADMlE&s=10" alt="मुक्तेश्वर"></div>
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjYRO_sRiiPxafQmT6Xb5gJPR0Vdb23Uafrqo4APzDxcz3x7mihMKU4iO4&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjYRO_sRiiPxafQmT6Xb5gJPR0Vdb23Uafrqo4APzDxcz3x7mihMKU4iO4&s=10" alt="मुक्तेश्वर"></div>
+                </div>
+            </div>
+
+            <!-- 9. Pangot -->
+            <div class="location-block" data-name="पांगोट pangot birds nainital eco resort local employment turnover" data-season="summer">
+                <h3 class="location-heading" onclick="openInfoModal('pangot')">9. पांगोट</h3>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openImgModal('https://www.corbett-national-park.com/assets/corbett-images/pangot-tourism-banner.webp')"><img src="https://www.corbett-national-park.com/assets/corbett-images/pangot-tourism-banner.webp" alt="पांगोट"></div>
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgTsR8xLIiYV6Q1jJ8IEZyd5coElXGg-GTP0R3YkWItg&s')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgTsR8xLIiYV6Q1jJ8IEZyd5coElXGg-GTP0R3YkWItg&s" alt="पांगोट"></div>
+                    <div class="image-card" onclick="openImgModal('https://static2.tripoto.com/media/filter/tst/img/324671/TripDocument/1495886488_13718712_10154318666729210_1889784603090054465_n.jpg')"><img src="https://static2.tripoto.com/media/filter/tst/img/324671/TripDocument/1495886488_13718712_10154318666729210_1889784603090054465_n.jpg" alt="पांगोट"></div>
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbMUdb2P-G36elJh3KqObG8c17LLdLp1tesNiTrItgoA&s')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbMUdb2P-G36elJh3KqObG8c17LLdLp1tesNiTrItgoA&s" alt="पांगोट"></div>
+                    <div class="image-card" onclick="openImgModal('https://media2.thrillophilia.com/images/photos/000/212/048/original/1587113430_pangot.jpg?w=518&h=490&dpr=1.5')"><img src="https://media2.thrillophilia.com/images/photos/000/212/048/original/1587113430_pangot.jpg?w=518&h=490&dpr=1.5" alt="पांगोट"></div>
+                </div>
+            </div>
+
+            <!-- 10. Milam Glacier -->
+            <div class="location-block" data-name="मिलम ग्लेशियर milam glacier pithoragarh expedition rural employment porters" data-season="summer">
+                <h3 class="location-heading" onclick="openInfoModal('milam')">10. मिलम ग्लेशियर</h3>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiRXE4f0UTkZz1kmCXOV8tHTl_jOo4JVSLEKpZIv5qYEAiA6RzBpxp3mQs&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiRXE4f0UTkZz1kmCXOV8tHTl_jOo4JVSLEKpZIv5qYEAiA6RzBpxp3mQs&s=10" alt="मिलम ग्लेशियर"></div>
+                    <div class="image-card" onclick="openImgModal('https://i0.wp.com/natureadmire.in/wp-content/uploads/2024/05/Milam-Glacier-Trekking-Guide-2024-himalayan-kumaon-nature-admire-bengaluru.jpg?fit=722%2C418&ssl=1')"><img src="https://i0.wp.com/natureadmire.in/wp-content/uploads/2024/05/Milam-Glacier-Trekking-Guide-2024-himalayan-kumaon-nature-admire-bengaluru.jpg?fit=722%2C418&ssl=1" alt="मिलम ग्लेशियर"></div>
+                    <div class="image-card" onclick="openImgModal('https://media.assettype.com/outlooktraveller/import/public/uploads/files/2015/04/211215161616-glr3.jpg')"><img src="https://media.assettype.com/outlooktraveller/import/public/uploads/files/2015/04/211215161616-glr3.jpg" alt="मिलम ग्लेशियर"></div>
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBuLVV-hxUiCiJXD2JBcHBBXlZiC_C1zzi36XdlxEng6hplz9K6j_D9w4P&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBuLVV-hxUiCiJXD2JBcHBBXlZiC_C1zzi36XdlxEng6hplz9K6j_D9w4P&s=10" alt="मिलम ग्लेशियर"></div>
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ49bakEVMnRQ7muOSUJ92JeG1lYV762jBQsF1UQ3DyIyHvKtMlVdCHGok&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ49bakEVMnRQ7muOSUJ92JeG1lYV762jBQsF1UQ3DyIyHvKtMlVdCHGok&s=10" alt="मिलम ग्लेशियर"></div>
+                </div>
+            </div>
+
+            <!-- 11. Pindari Glacier -->
+            <div class="location-block" data-name="पिंडारी ग्लेशियर pindari glacier bageshwar trekking profit local guide business" data-season="summer">
+                <h3 class="location-heading" onclick="openInfoModal('pindari')">11. पिंडारी ग्लेशियर</h3>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openImgModal('https://vl-prod-static.b-cdn.net/system/images/000/228/034/af4e63b8d4aab62f763fd69a5b493902/original/Pindari-Glacier.jpg')"><img src="https://vl-prod-static.b-cdn.net/system/images/000/228/034/af4e63b8d4aab62f763fd69a5b493902/original/Pindari-Glacier.jpg" alt="पिंडारी"></div>
+                    <div class="image-card" onclick="openImgModal('https://dq1q7qkthxkc0.cloudfront.net/UpdatedMedia/5c28f07b-5a04-460d-85b9-db2687ec2464.webp')"><img src="https://dq1q7qkthxkc0.cloudfront.net/UpdatedMedia/5c28f07b-5a04-460d-85b9-db2687ec2464.webp" alt="पिंडारी"></div>
+                    <div class="image-card" onclick="openImgModal('https://www.tourmyholiday.com/pdf/1750845923Pindari_Glacier,_Bageshwar,_in_Indian_Himalayas,_Uttarakhand.jpg')"><img src="https://www.tourmyholiday.com/pdf/1750845923Pindari_Glacier,_Bageshwar,_in_Indian_Himalayas,_Uttarakhand.jpg" alt="पिंडारी"></div>
+                    <div class="image-card" onclick="openImgModal('https://cdn.trekthehimalayas.com/images/PindariGlacierTrek/Slider/1a000eb2-fec9-4624-8cc3-b91d264927ce_Pindari-Glacier%20(2).webp')"><img src="https://cdn.trekthehimalayas.com/images/PindariGlacierTrek/Slider/1a000eb2-fec9-4624-8cc3-b91d264927ce_Pindari-Glacier%20(2).webp" alt="पिंडारी"></div>
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ59wFdLWkPQUhTNVrBbCvQL0IrNh2cYq8D7BqckG8_kchsBMqQYNNqOP0&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ59wFdLWkPQUhTNVrBbCvQL0IrNh2cYq8D7BqckG8_kchsBMqQYNNqOP0&s=10" alt="पिंडारी"></div>
+                </div>
+            </div>
+
+            <!-- 12. Kedarkantha -->
+            <div class="location-block" data-name="केदारकांठा kedarkantha snow trek uttarkashi winter tourism agency turnover profit equipment" data-season="winter">
+                <h3 class="location-heading" onclick="openInfoModal('kedarkantha')">12. केदारकांठा</h3>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openImgModal('https://dynamic-media-cdn.tripadvisor.com/media/photo-o/17/84/85/8d/the-summit.jpg?w=900&h=500&s=1')"><img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/17/84/85/8d/the-summit.jpg?w=900&h=500&s=1" alt="केदारकांठा"></div>
+                    <div class="image-card" onclick="openImgModal('https://media.istockphoto.com/id/944032308/photo/a-group-of-trekkers-enjoying-and-relaxing-on-the-submit-of-a-mountain.jpg?s=612x612&w=0&k=20&c=4chLKXXmlx_TIwZCoeG8qDhXEkzrrGTXwJ2TW7xpQlU=')"><img src="https://media.istockphoto.com/id/944032308/photo/a-group-of-trekkers-enjoying-and-relaxing-on-the-submit-of-a-mountain.jpg?s=612x612&w=0&k=20&c=4chLKXXmlx_TIwZCoeG8qDhXEkzrrGTXwJ2TW7xpQlU=" alt="केदारकांठा"></div>
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUaBo3AM2_l5MEhn0LZWTge8AU3pJRTdmsTfh3tbS-tZe6HBtXD80rX1uz&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUaBo3AM2_l5MEhn0LZWTge8AU3pJRTdmsTfh3tbS-tZe6HBtXD80rX1uz&s=10" alt="केदारकांठा"></div>
+                    <div class="image-card" onclick="openImgModal('https://cdn.trekthehimalayas.com/images/HomePageImages/Desktop/86801058-71b2-42ca-9ad8-b6330a7721b8_Location-Accessibility%20(1)%20(1).webp')"><img src="https://cdn.trekthehimalayas.com/images/HomePageImages/Desktop/86801058-71b2-42ca-9ad8-b6330a7721b8_Location-Accessibility%20(1)%20(1).webp" alt="केदारकांठा"></div>
+                    <div class="image-card" onclick="openImgModal('https://storage.googleapis.com/stateless-www-justwravel-com/2025/09/767ad94b-kedarkantha-trek-in-december.jpg')"><img src="https://storage.googleapis.com/stateless-www-justwravel-com/2025/09/767ad94b-kedarkantha-trek-in-december.jpg" alt="केदारकांठा"></div>
+                </div>
+            </div>
+
+            <!-- 13. Kalpeshwar -->
+            <div class="location-block" data-name="कल्पेश्वर kalpeshwar chamoli shiva religious tourism small shop profit" data-season="all">
+                <h3 class="location-heading" onclick="openInfoModal('kalpeshwar')">13. कल्पेश्वर</h3>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openImgModal('https://himalayanhikers.in/root-admin-laravel-panel/uploads/trek_images/kalpeshwar-temple.webp')"><img src="https://himalayanhikers.in/root-admin-laravel-panel/uploads/trek_images/kalpeshwar-temple.webp" alt="कल्पेश्वर"></div>
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThz8fIdDv4rEqjLZpzqkHu-oeoeDlR1GE9WV_0Th0pV8KcH4eyBcfh5lC3&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThz8fIdDv4rEqjLZpzqkHu-oeoeDlR1GE9WV_0Th0pV8KcH4eyBcfh5lC3&s=10" alt="कल्पेश्वर"></div>
+                    <div class="image-card" onclick="openImgModal('https://himachalabhiabhi.com/wp-content/uploads/2022/05/kalpashwer-temple.jpg')"><img src="https://himachalabhiabhi.com/wp-content/uploads/2022/05/kalpashwer-temple.jpg" alt="कल्पेश्वर"></div>
+                    <div class="image-card" onclick="openImgModal('https://www.pilgrimagetour.in/blog/wp-content/uploads/2024/02/Best-Time-to-Visit-Kalpeshwar-Temple.jpg')"><img src="https://www.pilgrimagetour.in/blog/wp-content/uploads/2024/02/Best-Time-to-Visit-Kalpeshwar-Temple.jpg" alt="कल्पेश्वर"></div>
+                    <div class="image-card" onclick="openImgModal('https://static.india.com/wp-content/uploads/2025/06/kalpeshwar-temple-uttarakhand.jpg?impolicy=Medium_Widthonly&w=340')"><img src="https://static.india.com/wp-content/uploads/2025/06/kalpeshwar-temple-uttarakhand.jpg?impolicy=Medium_Widthonly&w=340" alt="कल्पेश्वर"></div>
+                </div>
+            </div>
+
+            <!-- 14. Bedni Bugyal -->
+            <div class="location-block" data-name="बेदिनी बुग्याल bedni bugyal chamoli meadows forest revenue local business" data-season="summer">
+                <h3 class="location-heading" onclick="openInfoModal('bedni')">14. बेदिनी बुग्याल</h3>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openImgModal('https://upload.wikimedia.org/wikipedia/commons/f/fc/Bedini_Bugyal_01.jpg')"><img src="https://upload.wikimedia.org/wikipedia/commons/f/fc/Bedini_Bugyal_01.jpg" alt="बेदिनी बुग्याल"></div>
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9rBT9-xuouZuvqI2_K3uDvoGJf3koKagSIY9KgjwauXcTyVFCG8GVYJ8&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9rBT9-xuouZuvqI2_K3uDvoGJf3koKagSIY9KgjwauXcTyVFCG8GVYJ8&s=10" alt="बेदिनी बुग्याल"></div>
+                    <div class="image-card" onclick="openImgModal('https://static2.tripoto.com/media/filter/tst/img/1350024/Image/1662004532_imgonline_com_ua_twotoone_luvs5qce3veq.jpg.webp')"><img src="https://static2.tripoto.com/media/filter/tst/img/1350024/Image/1662004532_imgonline_com_ua_twotoone_luvs5qce3veq.jpg.webp" alt="बेदिनी बुग्याल"></div>
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQs5uZOYmCE7SojO3qqPUjnO3wOFN4ReE2kMgkpUZMsvKlaRevn_dfITfA&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQs5uZOYmCE7SojO3qqPUjnO3wOFN4ReE2kMgkpUZMsvKlaRevn_dfITfA&s=10" alt="बेदिनी बुग्याल"></div>
+                    <div class="image-card" onclick="openImgModal('https://www.traveltourguru.in/wp-content/uploads/2017/07/Enroute-Bedini-Bugyal-from-Ali-Bugyal.jpg')"><img src="https://www.traveltourguru.in/wp-content/uploads/2017/07/Enroute-Bedini-Bugyal-from-Ali-Bugyal.jpg" alt="बेदिनी बुग्याल"></div>
+                </div>
+            </div>
+
+            <!-- 15. Ghorakhal -->
+            <div class="location-block" data-name="घोड़ाखाल ghorakhal nainital golu devta religious economy business profit shops" data-season="all">
+                <h3 class="location-heading" onclick="openInfoModal('ghorakhal')">15. घोड़ाखाल</h3>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvhk0Qr9nyoFiFoeZuGTob39nMUD_b9aaYtKCVsK3hmD55slfYzxpTuHc&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvhk0Qr9nyoFiFoeZuGTob39nMUD_b9aaYtKCVsK3hmD55slfYzxpTuHc&s=10" alt="घोड़ाखाल"></div>
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2bmzWO1g_bAJXxlIsuuorpKywv0UBFwPeTw8zo9l8rXYiiQHOa3mel9qu&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2bmzWO1g_bAJXxlIsuuorpKywv0UBFwPeTw8zo9l8rXYiiQHOa3mel9qu&s=10" alt="घोड़ाखाल"></div>
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyDj75StpBEf-nRIYZSWB1Lp6CLU8SXZh8RQnobbAp4YWRr2HdkbLG4os&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyDj75StpBEf-nRIYZSWB1Lp6CLU8SXZh8RQnobbAp4YWRr2HdkbLG4os&s=10" alt="घोड़ाखाल"></div>
+                    <div class="image-card" onclick="openImgModal('https://www.jagranimages.com/images/newimg/21062022/ghorakhal%20mandir%20gate.jpg')"><img src="https://www.jagranimages.com/images/newimg/21062022/ghorakhal%20mandir%20gate.jpg" alt="घोड़ाखाल"></div>
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIR7kLYo1AAqoigpWJmDvtOO9-K2BLkkXOkihe3D5tLchTrwNoLqpDLzuk&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIR7kLYo1AAqoigpWJmDvtOO9-K2BLkkXOkihe3D5tLchTrwNoLqpDLzuk&s=10" alt="घोड़ाखाल"></div>
+                </div>
+            </div>
+
+            <!-- 16. Kainchi Dham -->
+            <div class="location-block" data-name="कैंची धाम kainchi dham nainital neem karoli turnover global economy hotel profit" data-season="all">
+                <h3 class="location-heading" onclick="openInfoModal('kainchi')">16. कैंची धाम</h3>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openImgModal('https://travelophila.com/wp-content/uploads/2025/09/kainchi-dham-neem-kiroli-baba.webp')"><img src="https://travelophila.com/wp-content/uploads/2025/09/kainchi-dham-neem-kiroli-baba.webp" alt="कैंची धाम"></div>
+                    <div class="image-card" onclick="openImgModal('https://upload.wikimedia.org/wikipedia/commons/e/e0/Early_morning_Glimpse_of_Kainchi_Dham_Nainital_2023.jpg')"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Early_morning_Glimpse_of_Kainchi_Dham_Nainital_2023.jpg" alt="कैंची धाम"></div>
+                    <div class="image-card" onclick="openImgModal('https://static1.squarespace.com/static/5e46d3773bf1ec51a04b43f8/5e4ac92571f6217a28b98aa4/5e4ac92571f6217a28b98aa5/1607096660126/kainchi-dham-e1458255355599.jpg?format=1500w')"><img src="https://static1.squarespace.com/static/5e46d3773bf1ec51a04b43f8/5e4ac92571f6217a28b98aa4/5e4ac92571f6217a28b98aa5/1607096660126/kainchi-dham-e1458255355599.jpg?format=1500w" alt="कैंची धाम"></div>
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqKrGrEUK6FUVo2-c6NyHiyn_-ieKu2ssLkhRTO-JQ1Nln3ctaat2A7amT&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqKrGrEUK6FUVo2-c6NyHiyn_-ieKu2ssLkhRTO-JQ1Nln3ctaat2A7amT&s=10" alt="कैंची धाम"></div>
+                    <div class="image-card" onclick="openImgModal('https://static2.tripoto.com/media/filter/tst/img/2042125/TripDocument/1609057697_1609057694746.jpg')"><img src="https://static2.tripoto.com/media/filter/tst/img/2042125/TripDocument/1609057697_1609057694746.jpg" alt="कैंची धाम"></div>
+                </div>
+            </div>
+
+            <!-- 17. Kanasar -->
+            <div class="location-block" data-name="कनासार kanasar chakrata dehradun small business rural profit camping" data-season="summer">
+                <h3 class="location-heading" onclick="openInfoModal('kanasar')">17. कनासार</h3>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openImgModal('https://images.news18.com/ibnkhabar/uploads/2025/06/HYP_5245262_kanasarthumb_8-3x2.jpeg')"><img src="https://images.news18.com/ibnkhabar/uploads/2025/06/HYP_5245262_kanasarthumb_8-3x2.jpeg" alt="कनासार"></div>
+                    <div class="image-card" onclick="openImgModal('https://images.news18.com/ibnkhabar/uploads/2025/06/HYP_5245262_4_2.jpg?im=Resize,width=400,aspect=fit,type=normal')"><img src="https://images.news18.com/ibnkhabar/uploads/2025/06/HYP_5245262_4_2.jpg?im=Resize,width=400,aspect=fit,type=normal" alt="कनासार"></div>
+                    <div class="image-card" onclick="openImgModal('https://travelchardham.com/sites/default/files/2024-11/Koti%20Kanasar%20Village%20Image.jpg')"><img src="https://travelchardham.com/sites/default/files/2024-11/Koti%20Kanasar%20Village%20Image.jpg" alt="कनासार"></div>
+                    <div class="image-card" onclick="openImgModal('https://content.jdmagicbox.com/comp/dehradun/p2/9999px135.x135.180818145525.j8p2/catalogue/kanasar-eco-lodge-chakrata-dehradun-lodging-services-x7ttb3fg6u.jpg')"><img src="https://content.jdmagicbox.com/comp/dehradun/p2/9999px135.x135.180818145525.j8p2/catalogue/kanasar-eco-lodge-chakrata-dehradun-lodging-services-x7ttb3fg6u.jpg" alt="कनासार"></div>
+                    <div class="image-card" onclick="openImgModal('https://r1imghtlak.mmtcdn.com/9da6ae90544311ed98d80a58a9feac02.webp')"><img src="https://r1imghtlak.mmtcdn.com/9da6ae90544311ed98d80a58a9feac02.webp" alt="कनासार"></div>
+                </div>
+            </div>
+
+            <!-- 18. Hanol -->
+            <div class="location-block" data-name="हनोल hanol mahasu devta dehradun handicraft business turnover economy" data-season="summer">
+                <h3 class="location-heading" onclick="openInfoModal('hanol')">18. हनोल</h3>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIExuhJENHRWppKLHjMrRz_04UnTbytinCwbzZildLu8BL6QdulXmvJ1cO&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIExuhJENHRWppKLHjMrRz_04UnTbytinCwbzZildLu8BL6QdulXmvJ1cO&s=10" alt="हनोल"></div>
+                    <div class="image-card" onclick="openImgModal('https://images.news18.com/ibnkhabar/uploads/2025/06/HYP_5262916_6_6.jpg?im=Resize,width=400,aspect=fit,type=normal')"><img src="https://images.news18.com/ibnkhabar/uploads/2025/06/HYP_5262916_6_6.jpg?im=Resize,width=400,aspect=fit,type=normal" alt="हनोल"></div>
+                    <div class="image-card" onclick="openImgModal('https://travelchardham.com/sites/default/files/2024-11/Mahasu%20Temple%20in%20Hanol.jpg')"><img src="https://travelchardham.com/sites/default/files/2024-11/Mahasu%20Temple%20in%20Hanol.jpg" alt="हनोल"></div>
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBgeCq1v1JDe4iQVufTsfiqoocqbZDW4dm-rQEAcYNy5hA2a6bqf_i5lUd&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBgeCq1v1JDe4iQVufTsfiqoocqbZDW4dm-rQEAcYNy5hA2a6bqf_i5lUd&s=10" alt="हनोल"></div>
+                    <div class="image-card" onclick="openImgModal('https://images.news18.com/ibnkhabar/uploads/2025/06/HYP_5262916_2_2.jpg')"><img src="https://images.news18.com/ibnkhabar/uploads/2025/06/HYP_5262916_2_2.jpg" alt="हनोल"></div>
+                </div>
+            </div>
+
+            <!-- 19. Dodital -->
+            <div class="location-block" data-name="डोडीताल dodital uttarkashi lake ganesha rural business local employment" data-season="summer">
+                <h3 class="location-heading" onclick="openInfoModal('dodital')">19. डोडीताल</h3>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAs67AFQZMvDGsPElikEHL8vGGp5BGOyZFse73iUaiMjEPGmwpjDz5ss_A&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAs67AFQZMvDGsPElikEHL8vGGp5BGOyZFse73iUaiMjEPGmwpjDz5ss_A&s=10" alt="डोडीताल"></div>
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6w92b9mjUZShx-jwdEk-ath55YobTILEIBy3taRv_tQ&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6w92b9mjUZShx-jwdEk-ath55YobTILEIBy3taRv_tQ&s=10" alt="डोडीताल"></div>
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwszNGSuPDipudUeFdEXjRlXUqZQuM9dvky0sgRHHEZMT0Wip9BoUlhQgz&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwszNGSuPDipudUeFdEXjRlXUqZQuM9dvky0sgRHHEZMT0Wip9BoUlhQgz&s=10" alt="डोडीताल"></div>
+                    <div class="image-card" onclick="openImgModal('https://www.himalayashelter.com/static/images/dodital_trek_2_1_imresizer.webp')"><img src="https://www.himalayashelter.com/static/images/dodital_trek_2_1_imresizer.webp" alt="डोडीताल"></div>
+                    <div class="image-card" onclick="openImgModal('https://blog-content.ixigo.com/wp-content/uploads/2013/08/Dodital_by_Nikhil.jpg')"><img src="https://blog-content.ixigo.com/wp-content/uploads/2013/08/Dodital_by_Nikhil.jpg" alt="डोडीताल"></div>
+                </div>
+            </div>
+
+            <!-- 20. Harsil -->
+            <div class="location-block" data-name="हर्षिल harsil uttarkashi apple economy export profit agriculture" data-season="summer">
+                <h3 class="location-heading" onclick="openInfoModal('harsil')">20. हर्षिल</h3>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openImgModal('https://static2.tripoto.com/media/filter/tst/img/2088026/TripDocument/1615689666_screenshot_20210314_080825.jpg')"><img src="https://static2.tripoto.com/media/filter/tst/img/2088026/TripDocument/1615689666_screenshot_20210314_080825.jpg" alt="हर्षिल"></div>
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3YcJdpQdagQeUgkT-0TT1A0y3EZbCv_Oa4YfZPs5buC_wAiAVGfK4xozH&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3YcJdpQdagQeUgkT-0TT1A0y3EZbCv_Oa4YfZPs5buC_wAiAVGfK4xozH&s=10" alt="हर्षिल"></div>
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIYTLkjN5RnQHzCa6ClLpEiP3KGRGuL3lezKcKjL40jfGfSxvTLdjElP5x&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIYTLkjN5RnQHzCa6ClLpEiP3KGRGuL3lezKcKjL40jfGfSxvTLdjElP5x&s=10" alt="हर्षिल"></div>
+                    <div class="image-card" onclick="openImgModal('https://i0.wp.com/www.ekumaun.com/wp-content/uploads/2023/10/harsil-valley-uttarakhand.jpg')"><img src="https://i0.wp.com/www.ekumaun.com/wp-content/uploads/2023/10/harsil-valley-uttarakhand.jpg" alt="हर्षिल"></div>
+                    <div class="image-card" onclick="openImgModal('https://thumbs.dreamstime.com/b/srikhand-peak-uttarakhand-photo-taken-mukhba-village-harshil-341973835.jpg')"><img src="https://thumbs.dreamstime.com/b/srikhand-peak-uttarakhand-photo-taken-mukhba-village-harshil-341973835.jpg" alt="हर्षिल"></div>
+                </div>
+            </div>
+
+            <!-- 21. Osla / Auli -->
+            <div class="location-block" data-name="ओसला औली osla auli chamoli skiing snow sports turnover revenue high profit" data-season="winter">
+                <h3 class="location-heading" onclick="openInfoModal('osla')">21. ओसला / औली</h3>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openImgModal('https://media.istockphoto.com/id/1255138914/photo/top-hill-view-of-auli-uttarakhand-india.jpg?s=612x612&w=0&k=20&c=3MNCH1VfdFl4UA5lhrvyKp8MXoNMLN8eixGKD6LuiaU=')"><img src="https://media.istockphoto.com/id/1255138914/photo/top-hill-view-of-auli-uttarakhand-india.jpg?s=612x612&w=0&k=20&c=3MNCH1VfdFl4UA5lhrvyKp8MXoNMLN8eixGKD6LuiaU=" alt="औली"></div>
+                    <div class="image-card" onclick="openImgModal('https://res.cloudinary.com/dyiffrkzh/image/upload/c_fill,f_auto,fl_progressive.strip_profile,g_center,h_400,q_auto,w_700/v1685784537/bbj/r5mbwfzixmir9uywjghj.jpg')"><img src="https://res.cloudinary.com/dyiffrkzh/image/upload/c_fill,f_auto,fl_progressive.strip_profile,g_center,h_400,q_auto,w_700/v1685784537/bbj/r5mbwfzixmir9uywjghj.jpg" alt="औली"></div>
+                    <div class="image-card" onclick="openImgModal('https://thumbs.dreamstime.com/b/beautiful-hill-station-ice-auli-winter-uttrakhand-123326880.jpg')"><img src="https://thumbs.dreamstime.com/b/beautiful-hill-station-ice-auli-winter-uttrakhand-123326880.jpg" alt="औली"></div>
+                    <div class="image-card" onclick="openImgModal('https://www.namasteindiatrip.com/wp-content/uploads/2019/09/Auli-Travel-HD.jpg')"><img src="https://www.namasteindiatrip.com/wp-content/uploads/2019/09/Auli-Travel-HD.jpg" alt="औली"></div>
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT82roioPQtuxLx_N1H18U7TCm5Mf7H5ARBWZ5aQpOIp1zyCjV0LTf2KM38&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT82roioPQtuxLx_N1H18U7TCm5Mf7H5ARBWZ5aQpOIp1zyCjV0LTf2KM38&s=10" alt="औली"></div>
+                </div>
+            </div>
+
+            <!-- 22. Kunti Valley -->
+            <div class="location-block" data-name="कुंती वैली kunti valley pithoragarh rural uncommercialized eco tourism small profit" data-season="summer">
+                <h3 class="location-heading" onclick="openInfoModal('kunti')">22. कुंती वैली</h3>
+                <div class="image-grid">
+                    <div class="image-card" onclick="openImgModal('https://www.shutterstock.com/image-photo/niti-valley-chamoli-uttarakhand-landscape-260nw-2667446953.jpg')"><img src="https://www.shutterstock.com/image-photo/niti-valley-chamoli-uttarakhand-landscape-260nw-2667446953.jpg" alt="कुंती वैली"></div>
+                    <div class="image-card" onclick="openImgModal('https://www.jagranimages.com/images/newimg/09112022/09_11_2022-kalap_23192217_125123872.webp')"><img src="https://www.jagranimages.com/images/newimg/09112022/09_11_2022-kalap_23192217_125123872.webp" alt="कुंती वैली"></div>
+                    <div class="image-card" onclick="openImgModal('https://images.jansatta.com/2026/04/peaceful-places-in-Uttarakhand-offbeat-places-in-Uttarakhand-hidden-gems-in-Uttarakhand.jpg')"><img src="https://images.jansatta.com/2026/04/peaceful-places-in-Uttarakhand-offbeat-places-in-Uttarakhand-hidden-gems-in-Uttarakhand.jpg" alt="कुंती वैली"></div>
+                    <div class="image-card" onclick="openImgModal('https://www.jagranimages.com/images/newimg/09062023/09_06_2023-uttrakhand_beautiful_villages_f_23436357.webp')"><img src="https://www.jagranimages.com/images/newimg/09062023/09_06_2023-uttrakhand_beautiful_villages_f_23436357.webp" alt="कुंती वैली"></div>
+                    <div class="image-card" onclick="openImgModal('https://i0.wp.com/travelindevbhoomi.wordpress.com/wp-content/uploads/2025/06/img_2057.jpg?fit=1200%2C900&ssl=1')"><img src="https://i0.wp.com/travelindevbhoomi.wordpress.com/wp-content/uploads/2025/06/img_2057.jpg?fit=1200%2C900&ssl=1" alt="कुंती वैली"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. MASTER DATABASE SECTION -->
+        <section id="master-data">
+            <h2 class="section-title">Data <span>Matrix</span></h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Location Name</th>
+                            <th>District</th>
+                            <th>Core Significance</th>
+                            <th>Monthly Visitors</th>
+                            <th>Economic Source</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="clickable-location" onclick="openInfoModal('nainital')">1. नैनीताल</td><td>नैनीताल</td><td>झील का शहर</td><td>50,000+</td><td>होटल इंडस्ट्री, बोटिंग</td></tr>
+                        <tr><td class="clickable-location" onclick="openInfoModal('mussoorie')">2. मसूरी</td><td>देहरादून</td><td>पहाड़ों की रानी</td><td>45,000+</td><td>रिसॉर्ट्स, टैक्सी सिंडिकेट</td></tr>
+                        <tr><td class="clickable-location" onclick="openInfoModal('nelong')">3. नेलांग वैली</td><td>उत्तरकाशी</td><td>इंडो-चाइना बॉर्डर</td><td>500 - 1000</td><td>परमिट फीस, 4x4 वाहन</td></tr>
+                        <tr><td class="clickable-location" onclick="openInfoModal('munsyari')">4. मुनस्यारी</td><td>पिथौरागढ़</td><td>पंचाचूली दर्शन</td><td>3000 - 5000</td><td>होमस्टे, पश्मीना व्यापार</td></tr>
+                        <tr><td class="clickable-location" onclick="openInfoModal('chopta')">5. चोपता</td><td>रुद्रप्रयाग</td><td>मिनी स्विट्जरलैंड</td><td>10,000+</td><td>टेंट कैम्पिंग, ढाबे</td></tr>
+                        <tr><td class="clickable-location" onclick="openInfoModal('khirsu')">6. खिरसू</td><td>पौड़ी</td><td>शांत एकांत, ओक जंगल</td><td>500 - 1000</td><td>एग्री-टूरिज़्म, होमस्टे</td></tr>
+                        <tr><td class="clickable-location" onclick="openInfoModal('kanatal')">7. कनाताल</td><td>टिहरी</td><td>लक्ज़री इको-टूरिज़्म</td><td>4000 - 6000</td><td>जंगल कैम्प, एडवेंचर</td></tr>
+                        <tr><td class="clickable-location" onclick="openInfoModal('mukteshwar')">8. मुक्तेश्वर</td><td>नैनीताल</td><td>शिव मंदिर, बागान</td><td>5000 - 7000</td><td>बुटीक कॉटेज, फार्मिंग</td></tr>
+                        <tr><td class="clickable-location" onclick="openInfoModal('pangot')">9. पांगोट</td><td>नैनीताल</td><td>पक्षी प्रेमियों का स्वर्ग</td><td>2000 - 3000</td><td>नेचर रिसॉर्ट्स, बर्डिंग</td></tr>
+                        <tr><td class="clickable-location" onclick="openInfoModal('milam')">10. मिलम</td><td>पिथौरागढ़</td><td>ऐतिहासिक व्यापार मार्ग</td><td>300 - 500</td><td>ट्रेकिंग परमिट, कुली</td></tr>
+                        <tr><td class="clickable-location" onclick="openInfoModal('pindari')">11. पिंडारी</td><td>बागेश्वर</td><td>नंदा देवी बेस</td><td>400 - 600</td><td>ट्रेक ऑपरेटर, गाइड</td></tr>
+                        <tr><td class="clickable-location" onclick="openInfoModal('kedarkantha')">12. केदारकांठा</td><td>उत्तरकाशी</td><td>विंटर स्नो ट्रेक</td><td>8000 - 10000</td><td>ट्रेकिंग एजेंसियां, रेंटल</td></tr>
+                        <tr><td class="clickable-location" onclick="openInfoModal('kalpeshwar')">13. कल्पेश्वर</td><td>चमोली</td><td>पंच केदार का हिस्सा</td><td>1500 - 2500</td><td>प्रसाद, धर्मशालाएं</td></tr>
+                        <tr><td class="clickable-location" onclick="openInfoModal('bedni')">14. बेदिनी</td><td>चमोली</td><td>अल्पाइन मैदान</td><td>1000 - 2000</td><td>ट्रेकिंग परमिट</td></tr>
+                        <tr><td class="clickable-location" onclick="openInfoModal('ghorakhal')">15. घोड़ाखाल</td><td>नैनीताल</td><td>गोलू देवता मंदिर</td><td>8000 - 10000</td><td>धार्मिक पर्यटन</td></tr>
+                        <tr><td class="clickable-location" onclick="openInfoModal('kainchi')">16. कैंची धाम</td><td>नैनीताल</td><td>नीम करोली बाबा आश्रम</td><td>30,000+</td><td>धर्मशालाएं, होटल</td></tr>
+                        <tr><td class="clickable-location" onclick="openInfoModal('kanasar')">17. कनासार</td><td>देहरादून</td><td>सबसे पुराने देवदार</td><td>500 - 800</td><td>इको-टूरिज़्म, कैम्पिंग</td></tr>
+                        <tr><td class="clickable-location" onclick="openInfoModal('hanol')">18. हनोल</td><td>देहरादून</td><td>महासू देवता मंदिर</td><td>1500 - 2000</td><td>धार्मिक पर्यटन, हस्तशिल्प</td></tr>
+                        <tr><td class="clickable-location" onclick="openInfoModal('dodital')">19. डोडीताल</td><td>उत्तरकाशी</td><td>गणेश जन्मस्थान</td><td>800 - 1200</td><td>फिशिंग परमिट, पोर्टर</td></tr>
+                        <tr><td class="clickable-location" onclick="openInfoModal('harsil')">20. हर्षिल</td><td>उत्तरकाशी</td><td>सेब के बागान</td><td>2000 - 3000</td><td>प्रीमियम कॉटेज, व्यापार</td></tr>
+                        <tr><td class="clickable-location" onclick="openInfoModal('osla')">21. औली</td><td>चमोली</td><td>विंटर स्कीइंग</td><td>2000 - 15000</td><td>रोपवे, इंस्ट्रक्टर फीस</td></tr>
+                        <tr><td class="clickable-location" onclick="openInfoModal('kunti')">22. कुंती वैली</td><td>पिथौरागढ़</td><td>पूरी तरह अनछुआ कोना</td><td>100 - 300</td><td>ग्रामीण अर्थव्यवस्था</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 6. ANALYTICS DASHBOARD -->
+        <section id="dashboard">
+            <h2 class="section-title">Visual <span>Analytics</span></h2>
+            <div class="dashboard-grid">
+                <div class="chart-card">
+                    <h3>Footfall <span>Analysis</span></h3>
+                    <canvas id="footfallChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Economy <span>Distribution</span></h3>
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. ABOUT US -->
+        <section id="about">
+            <h2 class="section-title">About <span>Us</span></h2>
+            <div class="about-grid">
+                <div class="about-card">
+                    <h3>Vinay Singh <span>Rawat</span></h3>
+                    <p>I am a technology student with a continuous drive to understand the intersection of Technology and Management. Having stepped into the professional world at the age of 17 with a keen interest in management, I constantly strive for self-improvement.</p>
+                    <p>My lifelong goal has been to leverage web development, app development, tech-friendly conversations, and a technological mindset to elevate small businesses in Uttarakhand and beyond, giving them a strong internet presence.</p>
+                    <p>I deeply enjoy meeting new people, communicating my ideas, and understanding their perspectives. My core career interests lie in roles such as Product Manager, Data Science & Analytics Engineer, Business Analyst, and other technical and management-oriented positions.</p>
+                </div>
+                <div class="about-card" style="border-left: 4px solid var(--primary-glow);">
+                    <h3>Vision <span>& Mission</span></h3>
+                    <p><strong>Mission:</strong> To connect with brilliant and renowned technology and management professionals over the next 5+ years, establishing a new and impactful identity in the industry.</p>
+                    <p><strong>Vision:</strong> To empower small-scale products and businesses in Uttarakhand and other regions with essential internet knowledge, visionary guidance, and collaborative growth, advancing together in the dynamic world of internet and management.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. CONNECT / BOOKING -->
+        <section id="contact">
+            <h2 class="section-title">Connect & <span>Booking</span></h2>
+            <div class="dashboard-grid">
+                <div class="about-card">
+                    <h3>Direct <span>Connect</span></h3>
+                    <div class="contact-buttons">
+                        <a href="https://wa.me/917505007905" class="wa-btn" target="_blank">📱 WhatsApp Chat</a>
+                        <a href="tel:+917505007905" class="call-btn">📞 Call Directly</a>
+                        <a href="mailto:vr123575@gmail.com" class="email-btn">📧 vr123575@gmail.com</a>
+                    </div>
+                    <div class="social-icons">
+                        <a href="#" title="Instagram">IG</a>
+                        <a href="#" title="LinkedIn">IN</a>
+                        <a href="#" title="GitHub">GH</a>
+                    </div>
+                </div>
+                <div class="about-card">
+                    <h3>Tourism <span>Booking Portal</span></h3>
+                    <form class="contact-form" onsubmit="submitBooking(event)">
+                        <input type="text" id="b_name" placeholder="Full Name" required>
+                        <input type="email" id="b_email" placeholder="Email Address" required>
+                        
+                        <select id="b_location" required>
+                            <option value="" disabled selected>Select Destination...</option>
+                            <option value="Nainital">1. Nainital</option>
+                            <option value="Mussoorie">2. Mussoorie</option>
+                            <option value="Nelong Valley">3. Nelong Valley</option>
+                            <option value="Munsyari">4. Munsyari</option>
+                            <option value="Chopta">5. Chopta</option>
+                            <option value="Khirsu">6. Khirsu</option>
+                            <option value="Kanatal">7. Kanatal</option>
+                            <option value="Mukteshwar">8. Mukteshwar</option>
+                            <option value="Pangot">9. Pangot</option>
+                            <option value="Milam Glacier">10. Milam Glacier</option>
+                            <option value="Pindari Glacier">11. Pindari Glacier</option>
+                            <option value="Kedarkantha">12. Kedarkantha</option>
+                            <option value="Kalpeshwar">13. Kalpeshwar</option>
+                            <option value="Bedni Bugyal">14. Bedni Bugyal</option>
+                            <option value="Ghorakhal">15. Ghorakhal</option>
+                            <option value="Kainchi Dham">16. Kainchi Dham</option>
+                            <option value="Kanasar">17. Kanasar</option>
+                            <option value="Hanol">18. Hanol</option>
+                            <option value="Dodital">19. Dodital</option>
+                            <option value="Harsil">20. Harsil</option>
+                            <option value="Osla/Auli">21. Osla / Auli</option>
+                            <option value="Kunti Valley">22. Kunti Valley</option>
+                        </select>
+
+                        <select id="b_season" required>
+                            <option value="" disabled selected>Select Season...</option>
+                            <option value="Summer">Summer</option>
+                            <option value="Winter">Winter</option>
+                            <option value="Monsoon">Monsoon</option>
+                            <option value="All Year">Any Time</option>
+                        </select>
+
+                        <div class="form-row">
+                            <input type="number" id="b_days" placeholder="Days (Max 30)" min="1" max="30" required>
+                            <input type="number" id="b_nights" placeholder="Nights (Max 30)" min="1" max="30" required>
+                        </div>
+
+                        <textarea id="b_message" rows="3" placeholder="Any Special Requests?" required></textarea>
+                        <button type="submit">Submit Booking Request</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- MODALS SECTION -->
+    <div id="locationInfoModal" class="modal-overlay">
+        <div class="info-modal-content">
+            <span class="close-btn" onclick="closeInfoModal()">&times;</span>
+            <h2 id="modalTitle">Title</h2>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <div id="imgLightbox" class="modal-overlay">
+        <span class="img-close-btn" onclick="closeImgModal()">&times;</span>
+        <img class="image-modal-content" id="lightboxImage">
+    </div>
+
+    <script>
+        // --- 1. ADVANCED SMOOTH SCROLL (FIXES THE "THROW TO BOTTOM" BUG) ---
+        function scrollToSection(event, targetId) {
+            event.preventDefault();
+            closeNav(); // Close sidebar if open
+            
+            const targetElement = document.getElementById(targetId);
+            if(targetElement) {
+                // Get header height dynamically
+                const headerHeight = document.getElementById("main-header").offsetHeight;
+                const elementPosition = targetElement.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerHeight - 20;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth"
+                });
+            }
+        }
+
+        // --- 2. THEME TOGGLE LOGIC ---
+        function toggleTheme() {
+            const html = document.documentElement;
+            const themeIcon = document.getElementById("themeIcon");
+            if (html.getAttribute("data-theme") === "dark") {
+                html.setAttribute("data-theme", "light");
+                themeIcon.innerHTML = "🌙";
+            } else {
+                html.setAttribute("data-theme", "dark");
+                themeIcon.innerHTML = "☀️";
+            }
+        }
+
+        // --- 3. SIDEBAR NAV LOGIC ---
+        function openNav() {
+            document.getElementById("mySidebar").classList.add("active");
+            document.getElementById("sidebarBackdrop").classList.add("active");
+        }
+        function closeNav() {
+            document.getElementById("mySidebar").classList.remove("active");
+            document.getElementById("sidebarBackdrop").classList.remove("active");
+        }
+
+        // --- 4. SMART SEARCH LOGIC ---
+        function filterGallery() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let seasonFilter = document.getElementById('seasonFilter').value;
+            let blocks = document.getElementsByClassName('location-block');
+
+            for (let i = 0; i < blocks.length; i++) {
+                let name = blocks[i].getAttribute('data-name').toLowerCase();
+                let blockSeason = blocks[i].getAttribute('data-season');
+                let matchesSearch = name.includes(input);
+                let matchesSeason = (seasonFilter === 'all' || blockSeason === seasonFilter);
+
+                if (matchesSearch && matchesSeason) {
+                    blocks[i].style.display = "block";
+                } else {
+                    blocks[i].style.display = "none";
+                }
+            }
+        }
+
+        // --- 5. WHATSAPP BOOKING SUBMIT LOGIC ---
+        function submitBooking(event) {
+            event.preventDefault();
+            const name = document.getElementById('b_name').value;
+            const email = document.getElementById('b_email').value;
+            const loc = document.getElementById('b_location').value;
+            const season = document.getElementById('b_season').value;
+            const days = document.getElementById('b_days').value;
+            const nights = document.getElementById('b_nights').value;
+            const msg = document.getElementById('b_message').value;
+
+            const waText = `Hello Vinay! I want to book a trip via Devbhoomi Portal.%0A%0A*Name:* ${name}%0A*Email:* ${email}%0A*Destination:* ${loc}%0A*Season:* ${season}%0A*Duration:* ${days} Days / ${nights} Nights%0A*Message:* ${msg}`;
+            
+            window.open(`https://wa.me/917505007905?text=${waText}`, '_blank');
+        }
+
+        // --- 6. MODALS LOGIC ---
+        function openImgModal(src) {
+            document.getElementById('lightboxImage').src = src;
+            document.getElementById('imgLightbox').style.display = "block";
+            document.body.style.overflow = "hidden";
+        }
+        function closeImgModal() {
+            document.getElementById('imgLightbox').style.display = "none";
+            document.body.style.overflow = "auto";
+        }
+        function closeInfoModal() {
+            document.getElementById('locationInfoModal').style.display = "none";
+            document.body.style.overflow = "auto";
+        }
+
+        // --- 7. DETAILED 4-POINT HISTORY DATABASE ---
+        const historyData = {
+            "nainital": {
+                name: "नैनीताल",
+                intro: "कुमाऊँ की शान 'नैनीताल' झीलों का शहर है। इसका नाम माता नयना देवी के नाम पर पड़ा है, जहाँ माता सती का नेत्र गिरा था। यह 51 शक्तिपीठों में से एक प्रमुख शक्तिपीठ है।",
+                british: "1841 में पी. बैरन (P. Barron) नामक एक अंग्रेज व्यापारी ने इसकी खोज की थी। अंग्रेजों को यहाँ की ठंडी जलवायु इतनी पसंद आई कि उन्होंने इसे संयुक्त प्रांत की 'गर्मियों की राजधानी' बना दिया। अंग्रेजों ने ही यहाँ माल रोड, गर्वनर हाउस, और शानदार ब्रिटिश वास्तुकला वाली इमारतें बनाईं, जिससे इसका जबरदस्त विस्तार हुआ।",
+                famous: "यह अपनी नाशपाती के आकार की 'नैनी झील', स्नो व्यू पॉइंट, टिफिन टॉप, नयना देवी मंदिर और इको केव पार्क के लिए दुनिया भर में सुप्रसिद्ध है।",
+                impact: "नैनीताल आज उत्तराखंड की अर्थव्यवस्था का सबसे बड़ा इंजन है। होटल इंडस्ट्री, बोटिंग, रोपवे, और मोमबत्ती (Candle) उद्योग से यह राज्य को सालाना करोड़ों का टर्नओवर देता है और लाखों स्थानीय युवाओं को रोजगार प्रदान करता है।"
+            },
+            "mussoorie": {
+                name: "मसूरी",
+                intro: "पहाड़ों की रानी 'मसूरी' दून घाटी के ऊपर स्थित है। 'मंसूर' नामक एक स्थानीय पौधे की प्रचुरता के कारण इसका नाम मसूरी पड़ा।",
+                british: "1825 में कैप्टन यंग (Captain Young) नामक ब्रिटिश सैन्य अधिकारी ने इसे खोजा। अंग्रेजों ने इसे शिकार और छुट्टियां बिताने के लिए विकसित किया। उन्होंने यहाँ भारत की पहली शराब की भठ्ठी (Brewery) और वुडस्टॉक जैसे स्कूल बनाए। अंग्रेजी दौर में यह विलासिता का मुख्य केंद्र था।",
+                famous: "कैम्पटी फॉल (Kempty Fall), गन हिल, लाल टिब्बा, कैमल बैक रोड और रस्किन बॉन्ड (प्रसिद्ध लेखक) की कहानियों के लिए यह सुप्रसिद्ध है।",
+                impact: "मसूरी में प्रीमियम टूरिज़्म, कॉर्पोरेट मीटिंग्स और टैक्सी सिंडिकेट का बहुत बड़ा नेटवर्क है। यह छोटे व्यवसायों और देहरादून जिले के राजस्व का एक बहुत बड़ा हिस्सा कवर करता है।"
+            },
+            "nelong": {
+                name: "नेलांग वैली",
+                intro: "उत्तरकाशी जिले में भारत-चीन सीमा पर स्थित यह 'उत्तराखंड का लद्दाख' है। 1962 के युद्ध के बाद यह दशकों तक बंद रही।",
+                british: "अंग्रेजों के समय में यह भारत और तिब्बत के बीच ऊन, पश्मीना और नमक व्यापार का मुख्य 'जाड़ गंगा' मार्ग था। गर्तांग गली (खड़ी चट्टान पर बनी लकड़ी की सीढ़ियां) इसका ऐतिहासिक प्रमाण है।",
+                famous: "यहाँ की ठंडी रेगिस्तानी जलवायु, बर्फ से ढके पहाड़ और तिब्बती संस्कृति से मिलते-जुलते परिदृश्य बहुत सुप्रसिद्ध हैं।",
+                impact: "यह अत्यधिक संरक्षित क्षेत्र है। यहाँ की आय 4x4 वाहन रेंटल और इनर-लाइन परमिट से आती है, जो साहसिक पर्यटन को बढ़ावा दे रही है।"
+            },
+            "munsyari": {
+                name: "मुनस्यारी",
+                intro: "पिथौरागढ़ में बसा मुनस्यारी (जिसका अर्थ है बर्फ की जगह) जोहार घाटी का प्रवेश द्वार है।",
+                british: "यह तिब्बत के साथ होने वाले प्राचीन 'नमक व्यापार' का मुख्य केंद्र था। अंग्रेजों ने यहाँ के भोटिया व्यापारियों के साथ व्यापारिक संधियाँ की थीं।",
+                famous: "हिमालय की 'पंचाचूली चोटियों' का सबसे साफ और सुनहरा नज़ारा, मिलम ट्रेक और नंदा देवी मंदिर के लिए यह सुप्रसिद्ध है।",
+                impact: "स्थानीय लोग होमस्टे, पश्मीना शॉल की बुनाई, जड़ी-बूटियों के व्यापार और पर्वतारोहियों के गाइड के रूप में बेहतरीन आय अर्जित कर रहे हैं।"
+            },
+            "chopta": {
+                name: "चोपता",
+                intro: "चोपता को 'भारत का मिनी स्विट्जरलैंड' कहा जाता है। यह केदारनाथ वन्यजीव अभ्यारण्य के बीच स्थित मखमली बुग्यालों का क्षेत्र है।",
+                british: "अंग्रेजों ने यहाँ व्यावसायिक निर्माण नहीं किया, लेकिन उनके पर्वतारोहियों ने इसे 'सबसे शुद्ध हिमालयी परिदृश्य' के रूप में प्रलेखित किया।",
+                famous: "दुनिया के सबसे ऊंचे शिव मंदिर 'तुंगनाथ', चंद्रशिला ट्रेक और सर्दियों में भारी बर्फबारी के लिए यह सुप्रसिद्ध है।",
+                impact: "यहाँ पक्के निर्माण की मनाही है। इको-फ्रेंडली टेंट, ढाबे और पोर्टर सेवा के ज़रिए यहाँ के स्थानीय लोग करोड़ों का टर्नओवर बना रहे हैं।"
+            },
+            "khirsu": {
+                name: "खिरसू",
+                intro: "पौड़ी गढ़वाल से कुछ दूरी पर बसा खिरसू ओक, देवदार और बुरांश के जंगलों से घिरा एक अत्यंत शांत एकांत है।",
+                british: "अंग्रेजी दौर में पौड़ी एक प्रमुख प्रशासनिक केंद्र था, और ब्रिटिश अधिकारी शांति के लिए खिरसू के जंगलों में विश्राम करने आते थे।",
+                famous: "यहाँ से हिमालय की 300 किलोमीटर चौड़ी बर्फीली श्रृंखला साफ दिखाई देती है। यह प्रदूषण मुक्त वातावरण के लिए प्रसिद्ध है।",
+                impact: "पर्यटन बहुत सीमित है, लेकिन सरकार यहाँ एग्री-टूरिज़्म और ग्रामीण होमस्टे को बढ़ावा देकर छोटे व्यवसायों की अर्थव्यवस्था मजबूत कर रही है।"
+            },
+            "kanatal": {
+                name: "कनाताल",
+                intro: "टिहरी गढ़वाल में स्थित कनाताल का नाम एक सूख चुकी झील (ताल) के नाम पर पड़ा है। यह मसूरी की भीड़ से दूर एक लक्ज़री ठिकाना है।",
+                british: "अंग्रेजी काल में यह स्थान केवल जंगली रास्तों का हिस्सा था। इसका असली विकास 21वीं सदी में इको-टूरिज़्म हब के रूप में हुआ।",
+                famous: "प्रसिद्ध 'सुरकंडा देवी सिद्धपीठ मंदिर', कौड़िया जंगल और एडवेंचर स्पोर्ट्स (ज़िपलाइन) के लिए सुप्रसिद्ध है।",
+                impact: "कनाताल आज लक्ज़री इको-टूरिज़्म का हब बन चुका है। जंगल कैम्पिंग और कॉर्पोरेट ट्रिप्स से युवाओं को भारी रोजगार मिल रहा है।"
+            },
+            "mukteshwar": {
+                name: "मुक्तेश्वर",
+                intro: "नैनीताल जिले में बसा यह शहर शिव के 350 साल पुराने 'मुक्तेश्वर महादेव मंदिर' के नाम पर पड़ा है, जहाँ शिव ने दानव को मुक्ति दी थी।",
+                british: "1893 में अंग्रेजों ने यहाँ 'भारतीय पशु चिकित्सा अनुसंधान संस्थान (IVRI)' की स्थापना की थी। महान शिकारी जिम कॉर्बेट ने यहीं आदमखोर बाघों का शिकार किया था।",
+                famous: "चीड़ के जंगलों, सेब/आड़ू के बागानों, 'चौथी की जाली' (खड़ी चट्टान) और हिमालयी दर्शन के लिए सुप्रसिद्ध है।",
+                impact: "स्थानीय लोग बुटीक होमस्टे, फलों की खेती और ऑर्गेनिक जैम/जेली बनाकर अर्थव्यवस्था को बहुत मजबूती दे रहे हैं।"
+            },
+            "pangot": {
+                name: "पांगोट",
+                intro: "नैनीताल से 15 किमी दूर पांगोट एक शांत वन ग्राम है, जो बर्ड वॉचिंग (पक्षी दर्शन) का स्वर्ग है।",
+                british: "ब्रिटिश प्रकृतिविदों (Naturalists) ने इस जगह के जंगलों की समृद्ध जैव विविधता को पहचाना था और यहाँ की प्रजातियों को किताबों में दर्ज किया।",
+                famous: "यहाँ हिमालयी पक्षियों की 500 से अधिक दुर्लभ प्रजातियां पाई जाती हैं। चीयर फीजेंट (Cheer Pheasant) यहाँ का मुख्य आकर्षण है।",
+                impact: "यहाँ अर्थव्यवस्था पूरी तरह से कंजर्वेशन-आधारित इको-टूरिज़्म पर टिकी है। रिसॉर्ट्स और विशेषज्ञ बर्डिंग गाइड विदेशी आय लाते हैं।"
+            },
+            "milam": {
+                name: "मिलम ग्लेशियर",
+                intro: "कुमाऊँ के सबसे बड़े ग्लेशियरों में से एक मिलम, जोहार घाटी का अंतिम पड़ाव है।",
+                british: "अंग्रेजों के समय यह भारत और तिब्बत के बीच व्यापार का प्रमुख मार्ग था। 1962 युद्ध के बाद यहाँ व्यापार बंद हो गया और गाँव वीरान हो गए।",
+                famous: "मिलम ग्लेशियर ट्रेक, नंदा देवी ईस्ट बेस कैंप और भोटिया व्यापारियों के पुराने खंडहर हो चुके घरों के लिए प्रसिद्ध है।",
+                impact: "आय पूरी तरह से कठिन ट्रेकिंग परमिट, उच्च-स्तरीय गाइड सर्विस, पोर्टर और खच्चरों के लॉजिस्टिक्स पर निर्भर है।"
+            },
+            "pindari": {
+                name: "पिंडारी ग्लेशियर",
+                intro: "बागेश्वर जिले में स्थित पिंडारी ग्लेशियर 'जीरो पॉइंट' और अपनी आसान हिमालयी चढ़ाई के लिए मशहूर है।",
+                british: "1830 में ब्रिटिश कमिश्नर जी.डब्ल्यू. ट्रेल (G.W. Traill) ने यहाँ एक दर्रे (Traill's Pass) की खोज की थी, जिससे इस रास्ते का विकास हुआ।",
+                famous: "नंदा देवी और नंदा कोट चोटियों के शानदार नज़ारे और मार्ग में पड़ने वाले 'खाती गांव' की ग्रामीण संस्कृति के लिए प्रसिद्ध है।",
+                impact: "ट्रेक ऑपरेटर, स्थानीय ग्रामीण गाइड और मार्ग में स्थित छोटे चायघर ही यहाँ की अर्थव्यवस्था का मुख्य आधार हैं।"
+            },
+            "kedarkantha": {
+                name: "केदारकांठा",
+                intro: "गोविंद पशु विहार नेशनल पार्क (उत्तरकाशी) में स्थित केदारकांठा में शिव का प्राचीन त्रिशूल स्थापित है।",
+                british: "ब्रिटिश काल में यह क्षेत्र लकड़ियों (Timber) के पारगमन के लिए जाना जाता था, लेकिन ट्रेकिंग का व्यावसायिक विकास हाल के दशकों में हुआ।",
+                famous: "सर्दियों में बर्फ से ढके पाइन के जंगलों और भारत के नंबर 1 'विंटर स्नो ट्रेक' के लिए सुप्रसिद्ध है।",
+                impact: "बेस कैंप 'सांकरी' गांव से ट्रेकिंग एजेंसियां, स्नो गियर रेंटल और ढाबा संचालकों की कमाई करोड़ों में होती है, जो स्थानीय अर्थव्यवस्था का आधार है।"
+            },
+            "kalpeshwar": {
+                name: "कल्पेश्वर",
+                intro: "चमोली की उर्गम घाटी में स्थित कल्पेश्वर पंच केदार का 5वां मंदिर है, जहाँ शिव की जटाओं की पूजा होती है। यह 12 महीने खुला रहता है।",
+                british: "अंग्रेजों ने गढ़वाल के धार्मिक मार्गों का सर्वेक्षण किया था, लेकिन यहाँ के मंदिरों का मूल स्वरूप और पवित्रता उन्होंने बनाए रखी।",
+                famous: "गुफा के अंदर स्थित प्राचीन शिव मंदिर, कल्पगंगा नदी और शांतिपूर्ण उर्गम घाटी के सेब के बागानों के लिए प्रसिद्ध है।",
+                impact: "आय मुख्य रूप से धार्मिक प्रसाद की दुकानों, छोटी धर्मशालाओं और स्थानीय सेब/राजमा की खेती से आती है।"
+            },
+            "bedni": {
+                name: "बेदिनी बुग्याल",
+                intro: "चमोली में रूपकुंड के रास्ते में पड़ने वाला बेदिनी बुग्याल एशिया के सबसे बड़े और खूबसूरत अल्पाइन घास के मैदानों में से एक है।",
+                british: "ब्रिटिश पर्वतारोहियों ने रूपकुंड (कंकाल झील) की खोज के दौरान बेदिनी के रास्तों का नक्शा तैयार किया था।",
+                famous: "त्रिशूल और नंदा घुंटी चोटियों के विशाल नज़ारे और ऐतिहासिक 'नंदा राज जात यात्रा' के मुख्य पड़ाव के लिए सुप्रसिद्ध है।",
+                impact: "अब यहाँ कैम्पिंग पर पाबंदी है। स्थानीय लोगों की आय ट्रेकिंग परमिट, वन विभाग के कार्यों और पोर्टर सेवा से होती है।"
+            },
+            "ghorakhal": {
+                name: "घोड़ाखाल",
+                intro: "नैनीताल से कुछ दूरी पर स्थित यह स्थान 'गोलू देवता' (न्याय के देवता) के मंदिर के लिए पूरे भारत में विख्यात है।",
+                british: "1966 में यहाँ प्रसिद्ध 'सैनिक स्कूल' की स्थापना हुई थी, जिसका परिसर पूर्व में नवाबों और ब्रिटिश अधिकारियों की संपदा हुआ करता था।",
+                famous: "श्रद्धालुओं द्वारा स्टाम्प पेपर पर लगाई गई अर्जियों (Petitions) और मंदिर प्रांगण में बंधी लाखों घंटियों के लिए प्रसिद्ध है।",
+                impact: "यहाँ की अर्थव्यवस्था पूरी तरह से धार्मिक पर्यटन (पूजा सामग्री की बिक्री) और नज़दीकी चाय बागानों (Shyamkhet Tea) से चलती है।"
+            },
+            "kainchi": {
+                name: "कैंची धाम",
+                intro: "नैनीताल के भवाली में स्थित कैंची धाम एक विश्व प्रसिद्ध आध्यात्मिक केंद्र है, जिसकी स्थापना नीम करोली बाबा ने की थी।",
+                british: "आश्रम का निर्माण स्वतंत्रता के बाद हुआ, लेकिन यह जगह ब्रिटिश काल के प्रमुख 'अल्मोड़ा-हल्द्वानी' व्यापारिक मार्ग का हिस्सा थी।",
+                famous: "नीम करोली बाबा के चमत्कारों के लिए प्रसिद्ध है। स्टीव जॉब्स और मार्क जुकरबर्ग जैसी हस्तियों ने यहाँ ध्यान लगाया है।",
+                impact: "देश-विदेश से आने वाले वीआईपी और पर्यटकों से भवाली के स्थानीय होटल, ट्रांसपोर्ट और प्रसाद व्यवसाय को भारी राजस्व मिलता है।"
+            },
+            "kanasar": {
+                name: "कनासार",
+                intro: "चकराता (देहरादून) से आगे जौनसार बावर क्षेत्र में स्थित कनासार एक इको-ज़ोन और संरक्षित वन क्षेत्र है।",
+                british: "अंग्रेजों ने चकराता को एक छावनी (Cantonment) बनाया था। उन्होंने कनासार के जंगलों को सुरक्षित रखा और यहाँ देवदार की कटाई पर सख्त नियम लगाए।",
+                famous: "यहाँ एशिया के 'सबसे पुराने और सबसे मोटे देवदार (Deodar)' के पेड़ और पारंपरिक जौनसारी संस्कृति सुप्रसिद्ध है।",
+                impact: "जंगल कैम्पिंग, नेचर वॉक और जौनसारी सांस्कृतिक होमस्टे के ज़रिए स्थानीय लोग बहुत अच्छी कमाई कर रहे हैं।"
+            },
+            "hanol": {
+                name: "हनोल",
+                intro: "टोंस नदी के किनारे बसा हनोल 'महासू देवता' के मुख्य मंदिर के लिए जाना जाता है। महासू जौनसार और हिमाचल के इष्ट देवता हैं।",
+                british: "ब्रिटिश काल में टोंस नदी का उपयोग लकड़ियों को बहाकर मैदानों तक ले जाने के लिए होता था, लेकिन हनोल का धार्मिक महत्व अक्षुण्ण रहा।",
+                famous: "9वीं शताब्दी की 'काठ-कुणी' (Kath-Kuni) वास्तुकला, जहाँ बिना लोहे की कील के लकड़ी और पत्थर से भव्य मंदिर बना है।",
+                impact: "धार्मिक पर्यटन और स्थानीय मेलों (जैसे जागड़ा) के समय यहाँ की अर्थव्यवस्था बहुत तेज़ी से बढ़ती है। हस्तशिल्प की अच्छी बिक्री होती है।"
+            },
+            "dodital": {
+                name: "डोडीताल",
+                intro: "उत्तरकाशी के जंगलों में स्थित डोडीताल एक ताज़े पानी की झील है। पौराणिक मान्यता है कि माता पार्वती ने यहीं भगवान गणेश को उत्पन्न किया था।",
+                british: "अंग्रेजों ने इस झील में विदेशी 'ब्राउन ट्राउट' (Brown Trout) मछली छोड़ी थी, जो आज भी यहाँ पाई जाती है।",
+                famous: "भगवान गणेश के जन्मस्थान, हिमालयन ट्राउट मछलियों और घने ओक/देवदार के ट्रेक के लिए सुप्रसिद्ध है।",
+                impact: "यह एक प्रमुख ट्रेकिंग मार्ग है। आय फिशिंग परमिट, वन विभाग के विश्राम गृह और अगोड़ा गांव के पोर्टर/गाइड्स से आती है।"
+            },
+            "harsil": {
+                name: "हर्षिल",
+                intro: "भागीरथी नदी के तट पर बसा हर्षिल अपनी प्राकृतिक सुंदरता और सेब के बागानों के लिए स्वर्ग माना जाता है।",
+                british: "19वीं सदी में एक ब्रिटिश नागरिक 'फ्रेडरिक विल्सन' (पहाड़ी विल्सन) ने यहाँ सेब की खेती शुरू की और लकड़ी का बड़ा व्यापार किया। उनकी कॉटेज आज भी यहाँ है।",
+                famous: "विल्सन एप्पल (Wilson Apple), भोटिया जनजाति की बुनाई, और 'राम तेरी गंगा मैली' फिल्म की शूटिंग के लिए सुप्रसिद्ध है।",
+                impact: "हर्षिल की अर्थव्यवस्था सेब के व्यापार, प्रीमियम रिसॉर्ट्स और गंगोत्री जाने वाले तीर्थयात्रियों के ठहराव पर मजबूती से टिकी है।"
+            },
+            "osla": {
+                name: "ओसला / औली",
+                intro: "ओसला हर की दून घाटी का एक प्राचीन गाँव है। वहीं औली (चमोली में) भारत का प्रीमियम विंटर स्कीइंग डेस्टिनेशन है।",
+                british: "ओसला के जंगलों का ब्रिटिश काल में वन सर्वेक्षण हुआ था। औली को बाद में भारतीय सेना और ITBP ने विंटर खेलों के लिए विकसित किया।",
+                famous: "ओसला अपने प्राचीन लकड़ी के घरों और औली अपनी केबल कार (रोपवे) व नंदा देवी चोटी के साक्षात् दर्शन के लिए सुप्रसिद्ध है।",
+                impact: "औली करोड़ों का टर्नओवर देता है (रोपवे, स्कीइंग गियर रेंटल, लक्ज़री होटल)। ओसला पूरी तरह ग्रामीण विलेज टूरिज़्म पर आधारित है।"
+            },
+            "kunti": {
+                name: "कुंती वैली",
+                intro: "पिथौरागढ़ के उच्च हिमालयी क्षेत्र में स्थित कुंती वैली अभी तक आम पर्यटकों की नज़रों से बिल्कुल ओझल है। इसका नाम माता कुंती पर पड़ा है।",
+                british: "यह क्षेत्र ब्रिटिश और तिब्बती सीमा के बहुत नज़दीक था, इसलिए अंग्रेजों ने इसे सिर्फ सामरिक और निगरानी के नज़रिए से देखा था।",
+                famous: "यह अपनी पूरी तरह से अनछुई (Untouched) प्राकृतिक छटा, शुद्ध पारिस्थितिकी और रहस्यमयी शांति के लिए जाना जाता है।",
+                impact: "यहाँ कमर्शियल टूरिज़्म न के बराबर है। अर्थव्यवस्था पूरी तरह से आदिम खेती, जड़ी-बूटी और कुछ गिने-चुने एडवेंचर होमस्टे पर टिकी है।"
+            }
+        };
+
+        function openInfoModal(key) {
+            const data = historyData[key];
+            if(data) {
+                document.getElementById('modalTitle').innerHTML = data.name;
+                document.getElementById('modalBody').innerHTML = `
+                    <div class="history-section">
+                        <h4>✦ परिचय एवं महत्व</h4>
+                        <p>${data.intro}</p>
+                    </div>
+                    <div class="history-section">
+                        <h4>✦ ब्रिटिश कालीन इतिहास और विस्तार</h4>
+                        <p>${data.british}</p>
+                    </div>
+                    <div class="history-section">
+                        <h4>✦ सुप्रसिद्ध स्थल और आकर्षण</h4>
+                        <p>${data.famous}</p>
+                    </div>
+                    <div class="history-section">
+                        <h4>✦ उत्तराखंड की अर्थव्यवस्था एवं रोजगार में योगदान</h4>
+                        <p>${data.impact}</p>
+                    </div>
+                `;
+                document.getElementById('locationInfoModal').style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        // --- 8. CHART.JS INITIALIZATION ---
+        Chart.defaults.color = '#cbd5e1';
+        Chart.defaults.font.family = 'Segoe UI';
+
+        const ctxFootfall = document.getElementById('footfallChart').getContext('2d');
+        new Chart(ctxFootfall, {
+            type: 'bar',
+            data: {
+                labels: ['नैनीताल', 'मसूरी', 'कैंची धाम', 'चोपता', 'कनाताल', 'मुनस्यारी', 'नेलांग'],
+                datasets: [{
+                    label: 'Monthly Visitors (in thousands)',
+                    data: [50, 45, 30, 10, 6, 4, 1],
+                    backgroundColor: ['#00f2fe', '#00f2fe', '#ff0844', '#4facfe', '#4facfe', '#9333ea', '#f59e0b'],
+                    borderRadius: 8, borderWidth: 1, borderColor: '#ffffff'
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { grid: { color: 'rgba(150,150,150,0.2)' } }, x: { grid: { display: false } } } }
+        });
+
+        const ctxRevenue = document.getElementById('revenueChart').getContext('2d');
+        new Chart(ctxRevenue, {
+            type: 'doughnut',
+            data: {
+                labels: ['Hotels', 'Homestays/Rural', 'Transport', 'Local Guides', 'Food', 'Others'],
+                datasets: [{
+                    data: [35, 20, 15, 10, 12, 8],
+                    backgroundColor: ['#ff0844', '#00f2fe', '#4facfe', '#10b981', '#f59e0b', '#9333ea'],
+                    borderWidth: 2, borderColor: 'transparent', hoverOffset: 10
+                }]
+            },
+            options: { responsive: true, cutout: '75%', plugins: { legend: { position: 'bottom' } } }
+        });
+    </script>
+</body>
+</html>

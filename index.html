@@ -18,7 +18,7 @@
             --accent-pink: #ff0844;
             --text-main: #ffffff;
             --text-muted: #cbd5e1;
-            --glass-bg: rgba(10, 15, 30, 0.55); 
+            --glass-bg: rgba(10, 15, 30, 0.65); 
             --glass-border: rgba(255, 255, 255, 0.15);
             --neon-shadow: 0 0 20px rgba(0, 242, 254, 0.6);
             --overlay-color: radial-gradient(circle, rgba(2,5,10,0.5) 0%, rgba(2,5,10,0.9) 100%);
@@ -27,22 +27,19 @@
 
         [data-theme="light"] {
             /* LIGHT THEME VARIABLES */
-            --bg-base: #f1f5f9;
+            --bg-base: #f8fafc;
             --primary-glow: #0284c7;
             --secondary-glow: #0ea5e9;
             --accent-pink: #e11d48;
             --text-main: #0f172a;
-            --text-muted: #334155;
-            --glass-bg: rgba(255, 255, 255, 0.75); 
-            --glass-border: rgba(0, 0, 0, 0.15);
-            --neon-shadow: 0 5px 15px rgba(2, 132, 199, 0.3);
-            --overlay-color: radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(241,245,249,0.85) 100%);
+            --text-muted: #475569;
+            --glass-bg: #ffffff; 
+            --glass-border: rgba(0, 0, 0, 0.1);
+            --neon-shadow: 0 5px 15px rgba(2, 132, 199, 0.2);
+            --overlay-color: radial-gradient(circle, rgba(255,255,255,0.6) 0%, rgba(241,245,249,0.95) 100%);
         }
 
-        /* 
-           FIX FOR SCROLLING ISSUE:
-           scroll-padding-top ensures anchor links stop exactly below the fixed header!
-        */
+        /* FIX FOR SCROLLING ISSUE */
         html { scroll-behavior: smooth; scroll-padding-top: 100px; }
         
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
@@ -63,7 +60,7 @@
         .bg-slider .slide:nth-child(4) { background-image: url('https://images.unsplash.com/photo-1610715936287-6c2ab208cbbf?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'); animation-delay: 18s; }
 
         @keyframes fadeBackground { 0% {opacity:0; transform:scale(1);} 10% {opacity:1;} 25% {opacity:1;} 35% {opacity:0; transform:scale(1.05);} 100% {opacity:0;} }
-        .bg-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--overlay-color); z-index: -1; backdrop-filter: blur(5px); transition: 0.5s ease; }
+        .bg-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--overlay-color); z-index: -1; backdrop-filter: blur(4px); transition: 0.5s ease; }
 
         /* ========================================================
            HEADER: TOP-LEFT HAMBURGER & THEME TOGGLE
@@ -73,32 +70,28 @@
             background: var(--glass-bg); backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--glass-border); padding: 15px 30px;
             display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 4px 30px rgba(0,0,0,0.3); transition: 0.5s ease;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.1); transition: 0.5s ease;
         }
 
         .header-left { display: flex; align-items: center; gap: 20px; }
-        
         .menu-btn { font-size: 32px; cursor: pointer; color: var(--text-main); transition: 0.3s; line-height: 1; }
         .menu-btn:hover { color: var(--primary-glow); text-shadow: var(--neon-shadow); transform: scale(1.1); }
-
         .theme-btn { font-size: 26px; cursor: pointer; background: none; border: none; outline: none; transition: 0.3s; }
         .theme-btn:hover { transform: scale(1.2) rotate(15deg); }
-
         .logo { font-size: 1.6rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; color: var(--text-main); text-align: right;}
         .logo span { background: linear-gradient(45deg, var(--primary-glow), var(--accent-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
         /* ========================================================
-           LEFT SIDEBAR (OVERLAY STYLE - NO LAYOUT SHIFT)
+           LEFT SIDEBAR 
            ======================================================== */
         .sidebar {
             position: fixed; top: 0; left: -350px; width: var(--sidebar-width); height: 100vh;
             background: var(--glass-bg); backdrop-filter: blur(35px);
             border-right: 1px solid var(--glass-border); display: flex; flex-direction: column;
             padding: 80px 20px 30px 20px; z-index: 1001; transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 5px 0 30px rgba(0,0,0,0.5); overflow-y: auto;
+            box-shadow: 5px 0 30px rgba(0,0,0,0.2); overflow-y: auto;
         }
         .sidebar.active { left: 0; }
-
         .sidebar nav { display: flex; flex-direction: column; gap: 12px; }
         .sidebar nav a {
             color: var(--text-main); text-decoration: none; font-size: 1.1rem; font-weight: 600;
@@ -109,19 +102,13 @@
             color: var(--primary-glow); background: rgba(0, 242, 254, 0.1);
             border: 1px solid var(--primary-glow); box-shadow: var(--neon-shadow); transform: translateX(5px);
         }
-
-        /* Sidebar Search Box */
         .sidebar-search { margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--glass-border); }
         .sidebar-search input, .sidebar-search select {
             width: 100%; padding: 12px 15px; margin-bottom: 12px; border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.3); background: rgba(0,0,0,0.4); color: white;
+            border: 1px solid var(--glass-border); background: rgba(0,0,0,0.1); color: var(--text-main);
             font-size: 0.95rem; outline: none; transition: 0.3s;
         }
-        .sidebar-search input:focus, .sidebar-search select:focus {
-            border-color: var(--primary-glow); box-shadow: var(--neon-shadow); background: rgba(0, 242, 254, 0.1);
-        }
-
-        /* Backdrop overlay for sidebar */
+        .sidebar-search input:focus, .sidebar-search select:focus { border-color: var(--primary-glow); box-shadow: var(--neon-shadow); background: rgba(0, 242, 254, 0.05); }
         .sidebar-backdrop { display: none; position: fixed; top:0; left:0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 999; }
         .sidebar-backdrop.active { display: block; }
 
@@ -130,13 +117,11 @@
            ======================================================== */
         main { padding-top: 80px; position: relative; z-index: 1; }
 
-        /* HERO & ADVANCED SEARCH */
         #hero { text-align: center; padding: 60px 20px 40px 20px; }
         #hero h2 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 900; margin-bottom: 20px; text-shadow: 0 5px 15px rgba(0,0,0,0.4); }
         #hero h2 span { background: linear-gradient(45deg, var(--primary-glow), var(--secondary-glow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         #hero p { font-size: clamp(1rem, 2vw, 1.4rem); color: var(--text-muted); max-width: 800px; margin: 0 auto; font-weight: 500; }
 
-        /* STATS RIBBON */
         .stats-ribbon { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 40px; }
         .stat-box { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 20px; border-radius: 12px; backdrop-filter: blur(15px); transition: 0.3s; flex: 1; min-width: 220px; max-width: 300px;}
         .stat-box:hover { transform: translateY(-5px); border-color: var(--accent-pink); box-shadow: 0 10px 20px rgba(254, 9, 121, 0.2); }
@@ -144,7 +129,7 @@
         .stat-box p { font-size: 0.95rem; text-transform: uppercase; font-weight: bold; color: var(--text-muted); }
 
         /* ========================================================
-           GALLERY & LOCATION BLOCKS (GLASSMORPHISM)
+           GALLERY & LOCATION BLOCKS
            ======================================================== */
         section { padding: 60px 20px; max-width: 1400px; margin: 0 auto; }
         .section-title { font-size: clamp(2rem, 4vw, 2.8rem); color: var(--text-main); margin-bottom: 50px; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 5px 15px rgba(0,0,0,0.2); text-align: center; }
@@ -155,24 +140,25 @@
         .location-heading:hover { color: var(--primary-glow); border-bottom: 2px solid var(--primary-glow); transform: translateX(10px); }
         
         .image-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .image-card { position: relative; height: 200px; border-radius: 12px; overflow: hidden; border: 1px solid var(--glass-border); background: var(--glass-bg); backdrop-filter: blur(10px); cursor: pointer; transition: 0.5s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .image-card { position: relative; height: 200px; border-radius: 12px; overflow: hidden; border: 1px solid var(--glass-border); background: var(--glass-bg); backdrop-filter: blur(10px); cursor: pointer; transition: 0.5s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
         .image-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease; filter: brightness(0.9); }
         .image-card:hover img { transform: scale(1.15) rotate(2deg); filter: brightness(1.1); }
         .image-card:hover { border-color: var(--primary-glow); box-shadow: var(--neon-shadow); transform: translateY(-10px); z-index: 10; }
 
-        /* MASTER DATABASE TABLE */
-        .table-wrapper { background: var(--glass-bg); backdrop-filter: blur(25px); border-radius: 20px; padding: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.4); border: 1px solid var(--glass-border); overflow-x: auto; }
+        /* ========================================================
+           DATA MATRIX, ANALYTICS & ABOUT
+           ======================================================== */
+        .table-wrapper { background: var(--glass-bg); backdrop-filter: blur(25px); border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid var(--glass-border); overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; min-width: 900px; text-align: left; }
-        th { padding: 15px; color: var(--primary-glow); border-bottom: 2px solid var(--accent-pink); font-size: 1.05rem; text-transform: uppercase; background: rgba(0,0,0,0.1); }
+        th { padding: 15px; color: var(--primary-glow); border-bottom: 2px solid var(--accent-pink); font-size: 1.05rem; text-transform: uppercase; background: rgba(0,0,0,0.05); }
         td { padding: 15px; border-bottom: 1px solid var(--glass-border); color: var(--text-main); font-size: 1rem; }
         tbody tr { transition: 0.3s; }
         tbody tr:hover { background-color: var(--glass-bg); transform: scale(1.01); box-shadow: inset 5px 0 0 var(--primary-glow); }
         .clickable-location { color: var(--primary-glow); font-weight: bold; cursor: pointer; transition: 0.3s; }
         .clickable-location:hover { color: var(--accent-pink); }
 
-        /* DASHBOARD & ABOUT CARDS */
         .dashboard-grid, .about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
-        .chart-card, .about-card { background: var(--glass-bg); backdrop-filter: blur(25px); padding: 30px; border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: 0 10px 40px rgba(0,0,0,0.3); transition: 0.5s; }
+        .chart-card, .about-card { background: var(--glass-bg); backdrop-filter: blur(25px); padding: 30px; border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: 0.5s; }
         .chart-card:hover, .about-card:hover { border-color: var(--primary-glow); box-shadow: var(--neon-shadow); transform: translateY(-5px); }
         .chart-card h3, .about-card h3 { color: var(--text-main); margin-bottom: 20px; font-size: 1.6rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px; }
         .chart-card h3 span, .about-card h3 span { color: var(--primary-glow); }
@@ -180,48 +166,172 @@
 
         /* CONTACT & BOOKING FORM */
         .contact-buttons { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
-        .contact-buttons a { display: block; padding: 15px; border-radius: 8px; text-decoration: none; color: white; font-weight: bold; font-size: 1.05rem; transition: 0.4s; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.5); text-align: center; }
-        .contact-buttons a.wa-btn:hover { background: #25D366; border-color: #25D366; box-shadow: 0 0 15px #25D366; }
+        .contact-buttons a { display: block; padding: 15px; border-radius: 8px; text-decoration: none; color: var(--text-main); font-weight: bold; font-size: 1.05rem; transition: 0.4s; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.1); text-align: center; }
+        .contact-buttons a.wa-btn:hover { background: #25D366; border-color: #25D366; box-shadow: 0 0 15px #25D366; color: white; }
         .contact-buttons a.call-btn:hover { background: #00f2fe; border-color: #00f2fe; color: black; box-shadow: 0 0 15px #00f2fe; }
-        .contact-buttons a.email-btn:hover { background: #ea4335; border-color: #ea4335; box-shadow: 0 0 15px #ea4335; }
+        .contact-buttons a.email-btn:hover { background: #ea4335; border-color: #ea4335; box-shadow: 0 0 15px #ea4335; color: white; }
         
-        .social-icons { display: flex; gap: 15px; margin-top: 20px; justify-content: center; }
-        .social-icons a { width: 45px; height: 45px; border-radius: 50%; display: flex; justify-content: center; align-items: center; background: rgba(0,0,0,0.6); border: 1px solid var(--glass-border); color: var(--primary-glow); font-weight: bold; text-decoration: none; transition: 0.4s; }
-        .social-icons a:hover { background: var(--primary-glow); color: black; box-shadow: var(--neon-shadow); transform: scale(1.1); }
-
-        .contact-form input, .contact-form textarea, .contact-form select { width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(0,0,0,0.5); color: white; font-size: 1rem; transition: 0.4s; outline: none; }
-        .contact-form input:focus, .contact-form textarea:focus, .contact-form select:focus { border-color: var(--primary-glow); box-shadow: var(--neon-shadow); background: rgba(0, 242, 254, 0.15); }
-        .contact-form option { background: #02050a; color: white; }
-        
+        .contact-form input, .contact-form textarea, .contact-form select { width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 8px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.1); color: var(--text-main); font-size: 1rem; transition: 0.4s; outline: none; }
+        .contact-form input:focus, .contact-form textarea:focus, .contact-form select:focus { border-color: var(--primary-glow); box-shadow: var(--neon-shadow); background: rgba(0, 242, 254, 0.05); }
+        .contact-form option { background: var(--bg-base); color: var(--text-main); }
         .form-row { display: flex; gap: 10px; flex-wrap: wrap; }
         .form-row input { flex: 1; min-width: 120px; }
-
         .contact-form button { width: 100%; padding: 18px; background: linear-gradient(45deg, #25D366, #128C7E); color: #fff; border: none; font-weight: bold; font-size: 1.1rem; border-radius: 8px; cursor: pointer; transition: 0.4s; text-transform: uppercase; letter-spacing: 1px; }
-        .contact-form button:hover { box-shadow: 0 0 20px rgba(37, 211, 102, 0.7); transform: translateY(-3px); }
+        .contact-form button:hover { box-shadow: 0 0 20px rgba(37, 211, 102, 0.4); transform: translateY(-3px); }
 
         /* ========================================================
-           PREMIUM GLASSMORPHISM FOOTER
+           NEW STRUCTURED FOOTER (BASED ON IMAGE REFERENCE)
            ======================================================== */
-        .glass-footer { background: var(--glass-bg); backdrop-filter: blur(30px); border-top: 1px solid var(--glass-border); padding: 70px 20px 20px 20px; margin-top: 100px; position: relative; z-index: 10; box-shadow: 0 -10px 40px rgba(0,0,0,0.4); }
-        .footer-content { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 50px; margin-bottom: 50px; }
-        .footer-col h2 { font-size: 2.2rem; color: var(--text-main); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; font-weight: 900; }
-        .footer-col h2 span { background: linear-gradient(45deg, var(--primary-glow), var(--accent-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: var(--neon-shadow); }
-        .footer-col h3 { color: var(--primary-glow); font-size: 1.4rem; margin-bottom: 25px; position: relative; padding-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
-        .footer-col h3::after { content: ''; position: absolute; left: 0; bottom: 0; width: 60px; height: 3px; background: var(--accent-pink); box-shadow: 0 0 10px var(--accent-pink); border-radius: 5px; }
-        .footer-col p { color: var(--text-muted); line-height: 1.9; font-size: 1.1rem; text-align: justify; }
-        .footer-col ul { list-style: none; }
-        .footer-col ul li { margin-bottom: 18px; }
-        .footer-col ul li a { color: var(--text-muted); text-decoration: none; transition: 0.4s ease; font-size: 1.1rem; display: inline-flex; align-items: center; gap: 10px; cursor: pointer; }
-        .footer-col ul li a::before { content: '✦'; color: var(--accent-pink); font-size: 0.9rem; opacity: 0; transform: translateX(-10px); transition: 0.4s ease; }
-        .footer-col ul li a:hover { color: var(--primary-glow); transform: translateX(5px); text-shadow: var(--neon-shadow); }
-        .footer-col ul li a:hover::before { opacity: 1; transform: translateX(0); }
-        .newsletter-form { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
-        .newsletter-form input { padding: 16px; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.5); color: white; font-size: 1rem; outline: none; transition: 0.4s; }
-        .newsletter-form input:focus { border-color: var(--primary-glow); box-shadow: var(--neon-shadow); background: rgba(0, 242, 254, 0.1); }
-        .newsletter-form button { padding: 16px; background: linear-gradient(45deg, var(--primary-glow), var(--secondary-glow)); color: #000; border: none; border-radius: 10px; font-weight: bold; font-size: 1.1rem; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.4s; }
-        .newsletter-form button:hover { box-shadow: 0 0 25px rgba(0, 242, 254, 0.7); transform: translateY(-3px); color: white; }
-        .footer-bottom { text-align: center; padding-top: 25px; border-top: 1px solid var(--glass-border); color: var(--text-muted); font-size: 1rem; letter-spacing: 1px; }
-        .footer-bottom .brand-highlight { color: var(--primary-glow); font-weight: bold; text-shadow: var(--neon-shadow); }
+        .structured-footer {
+            background: var(--glass-bg);
+            backdrop-filter: blur(30px);
+            border-top: 1px solid var(--glass-border);
+            margin-top: 100px;
+            color: var(--text-main);
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Top Section of Footer */
+        .sf-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 5%;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .sf-top .logo {
+            font-size: 2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .sf-top .logo span {
+            color: var(--primary-glow);
+            text-shadow: var(--neon-shadow);
+        }
+        .sf-top .adv-btn {
+            background: var(--text-main);
+            color: var(--bg-base);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+        .sf-top .adv-btn:hover {
+            box-shadow: 0 0 15px rgba(255,255,255,0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Main Section of Footer (Columns + Right Panel) */
+        .sf-main {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 50px 5%;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .sf-links {
+            flex: 3;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 40px;
+            padding-right: 40px;
+        }
+        .sf-col h4 {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .sf-col ul { list-style: none; padding: 0; }
+        .sf-col ul li { margin-bottom: 15px; }
+        .sf-col ul li a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+        .sf-col ul li a:hover { color: var(--primary-glow); padding-left: 5px; }
+
+        /* Right Panel (Join Now Style) */
+        .sf-join {
+            flex: 1;
+            min-width: 280px;
+            padding-left: 40px;
+            border-left: 1px solid var(--glass-border);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .sf-join h4 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .sf-join p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        .sf-join .btn-solid {
+            background: #facc15; /* Yellow matching the image */
+            color: #000;
+            border: none;
+            padding: 14px;
+            border-radius: 30px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+        .sf-join .btn-solid:hover { background: #eab308; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(250, 204, 21, 0.4); }
+        .sf-join .btn-outline {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--glass-border);
+            padding: 14px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+        .sf-join .btn-outline:hover { background: var(--glass-border); }
+
+        /* Bottom Section of Footer */
+        .sf-bottom {
+            padding: 30px 5%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .sf-bottom-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            margin-right: 20px;
+            transition: 0.3s;
+        }
+        .sf-bottom-links a:hover { color: var(--primary-glow); }
+        .sf-copyright {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Footer Responsive */
+        @media (max-width: 900px) {
+            .sf-main { flex-direction: column; }
+            .sf-join { padding-left: 0; border-left: none; border-top: 1px solid var(--glass-border); padding-top: 40px; margin-top: 20px; }
+            .sf-links { padding-right: 0; }
+            .sf-top { flex-direction: column; gap: 20px; text-align: center; }
+        }
 
         /* ========================================================
            MODALS (HISTORY & IMAGES) MOBILE OPTIMIZED
@@ -229,9 +339,8 @@
         .modal-overlay { display: none; position: fixed; z-index: 4000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); overflow-y: auto; padding: 20px 0; }
         .info-modal-content { background: var(--glass-bg); margin: 0 auto; padding: 40px; border-radius: 15px; border: 1px solid var(--primary-glow); width: 92%; max-width: 900px; position: relative; box-shadow: var(--neon-shadow); animation: slideDown 0.5s ease; backdrop-filter: blur(30px); }
         @keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        
         .info-modal-content h2 { color: var(--primary-glow); margin-bottom: 30px; font-size: clamp(2rem, 5vw, 3rem); border-bottom: 2px solid var(--accent-pink); padding-bottom: 15px; }
-        .history-section { margin-bottom: 25px; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 12px; border-left: 4px solid var(--primary-glow); }
+        .history-section { margin-bottom: 25px; background: rgba(0,0,0,0.1); padding: 20px; border-radius: 12px; border-left: 4px solid var(--primary-glow); }
         .history-section h4 { color: var(--text-main); font-size: 1.2rem; margin-bottom: 10px; text-transform: uppercase; }
         .history-section p { font-size: 1.05rem; line-height: 1.8; color: var(--text-muted); text-align: justify; }
 
@@ -249,6 +358,7 @@
             .info-modal-content { padding: 25px; }
             .close-btn { right: 15px; top: 10px; }
             .stat-box { min-width: 100%; }
+            .form-row { flex-direction: column; gap: 0; }
         }
     </style>
 </head>
@@ -284,7 +394,6 @@
             <a onclick="scrollToSection(event, 'contact')">✦ Connect / Booking</a>
         </nav>
 
-        <!-- Advanced Search Box in Sidebar -->
         <div class="sidebar-search">
             <h4 style="color:var(--text-muted); margin-bottom:10px; font-size:0.9rem; text-transform:uppercase;">Data Deep Search</h4>
             <input type="text" id="searchInput" placeholder="Search (Nainital, Profit, Snow)..." onkeyup="filterGallery()">
@@ -391,8 +500,7 @@
                 <div class="image-grid">
                     <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpsjWVEMHSk3qjttDLKzOalABOssXudYENAoAQDUR_1r-Kt6vNW79Xq0M&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpsjWVEMHSk3qjttDLKzOalABOssXudYENAoAQDUR_1r-Kt6vNW79Xq0M&s=10" alt="खिरसू"></div>
                     <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSFIIsTW6n72x5WdhwYftClqqaXogQHu1tVnvgRLbgSoi16DhzfvK8WBw&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSFIIsTW6n72x5WdhwYftClqqaXogQHu1tVnvgRLbgSoi16DhzfvK8WBw&s=10" alt="खिरसू"></div>
-                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBzaxi71Zo22P3aFkoktmpGP-eo8GLa5ca5wVZGUrdTHTPwY9FQtJvkZos&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBzaxi71Zo22P3aFkoktmpGP-eo8GLa5ca5wVZGUrdTHTPwY9FQtJvkZos&s=10" alt="खिरसू"></div>
-                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaPhLGs_PiY1WHwcNH_CF37bESbg0GcCGdzhoB4Fxlh3y5P4-y5WytRu8&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaPhLGs_PiY1WHwcNH_CF37bESbg0GcCGdzhoB4Fxlh3y5P4-y5WytRu8&s=10" alt="खिरसू"></div>
+                    <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBzaxi71Zo22P3aFkoktmpGP-eo8GLa5ca5wVZGUrdTHTPwY9FQtJvkZos&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaPhLGs_PiY1WHwcNH_CF37bESbg0GcCGdzhoB4Fxlh3y5P4-y5WytRu8&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaPhLGs_PiY1WHwcNH_CF37bESbg0GcCGdzhoB4Fxlh3y5P4-y5WytRu8&s=10" alt="खिरसू"></div>
                     <div class="image-card" onclick="openImgModal('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqN99dAsnrA5CJZrSUx7heu_cWnxXn5xi8zQ-b8ZboaTbSdd-Z2dLW2u4&s=10')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqN99dAsnrA5CJZrSUx7heu_cWnxXn5xi8zQ-b8ZboaTbSdd-Z2dLW2u4&s=10" alt="खिरसू"></div>
                 </div>
             </div>
@@ -609,7 +717,7 @@
                         <tr><td class="clickable-location" onclick="openInfoModal('mussoorie')">2. मसूरी</td><td>देहरादून</td><td>पहाड़ों की रानी</td><td>45,000+</td><td>रिसॉर्ट्स, टैक्सी सिंडिकेट</td></tr>
                         <tr><td class="clickable-location" onclick="openInfoModal('nelong')">3. नेलांग वैली</td><td>उत्तरकाशी</td><td>इंडो-चाइना बॉर्डर</td><td>500 - 1000</td><td>परमिट फीस, 4x4 वाहन</td></tr>
                         <tr><td class="clickable-location" onclick="openInfoModal('munsyari')">4. मुनस्यारी</td><td>पिथौरागढ़</td><td>पंचाचूली दर्शन</td><td>3000 - 5000</td><td>होमस्टे, पश्मीना व्यापार</td></tr>
-                        <tr><td class="clickable-location" onclick="openInfoModal('chopta')">5. चोपता</td><td>रुद्रप्रयाग</td><td>मिनी स्विट्जरलैंड</td><td>10,000+</td><td>टेंट कैम्पिंग, ढाबे</td></tr>
+                        <tr><td class="clickable-location" onclick="openInfoModal('chopta')">5. चोपta</td><td>रुद्रप्रयाग</td><td>मिनी स्विट्जरलैंड</td><td>10,000+</td><td>टेंट कैम्पिंग, ढाबे</td></tr>
                         <tr><td class="clickable-location" onclick="openInfoModal('khirsu')">6. खिरसू</td><td>पौड़ी</td><td>शांत एकांत, ओक जंगल</td><td>500 - 1000</td><td>एग्री-टूरिज़्म, होमस्टे</td></tr>
                         <tr><td class="clickable-location" onclick="openInfoModal('kanatal')">7. कनाताल</td><td>टिहरी</td><td>लक्ज़री इको-टूरिज़्म</td><td>4000 - 6000</td><td>जंगल कैम्प, एडवेंचर</td></tr>
                         <tr><td class="clickable-location" onclick="openInfoModal('mukteshwar')">8. मुक्तेश्वर</td><td>नैनीताल</td><td>शिव मंदिर, बागान</td><td>5000 - 7000</td><td>बुटीक कॉटेज, फार्मिंग</td></tr>
@@ -730,58 +838,72 @@
         </section>
 
         <!-- ========================================================
-             PREMIUM GLASSMORPHISM FOOTER
+             NEW STRUCTURED FOOTER (BASED ON IMAGE REFERENCE)
              ======================================================== -->
-        <footer class="glass-footer">
-            <div class="footer-content">
-                <!-- Brand Column -->
-                <div class="footer-col">
-                    <h2>Explore <span>Uttarakhand</span></h2>
-                    <p>A data-driven initiative elevating the beauty, history, and local businesses of Devbhoomi into the digital world with a strong internet presence.</p>
-                    <div class="social-icons" style="justify-content: flex-start; margin-top: 20px;">
-                        <!-- Paste your links in the href="#" below -->
-                        <a href="#" title="Instagram">IG</a>
-                        <a href="#" title="LinkedIn">IN</a>
-                        <a href="#" title="GitHub">GH</a>
+        <footer class="structured-footer">
+            <!-- Top Section: Logo & Partner Button -->
+            <div class="sf-top">
+                <div class="logo">Explore <span>Uttarakhand</span></div>
+                <button class="adv-btn" onclick="scrollToSection(event, 'contact')">Partner With Us</button>
+            </div>
+
+            <!-- Main Section: Grid & Join Panel -->
+            <div class="sf-main">
+                
+                <!-- Links Grid (Left Side) -->
+                <div class="sf-links">
+                    <div class="sf-col">
+                        <h4>Explore</h4>
+                        <ul>
+                            <li><a onclick="scrollToSection(event, 'hero')">Home Base</a></li>
+                            <li><a onclick="scrollToSection(event, 'gallery')">Visual Assets</a></li>
+                            <li><a onclick="scrollToSection(event, 'master-data')">Data Matrix</a></li>
+                            <li><a onclick="scrollToSection(event, 'dashboard')">Strategic Analytics</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="sf-col">
+                        <h4>Platform</h4>
+                        <ul>
+                            <li><a onclick="scrollToSection(event, 'about')">Meet The Creator</a></li>
+                            <li><a href="https://wa.me/917505007905" target="_blank">WhatsApp Support</a></li>
+                            <li><a href="tel:+917505007905">Booking Helpline</a></li>
+                            <li><a href="mailto:vr123575@gmail.com">Business Email</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="sf-col">
+                        <h4>Connect</h4>
+                        <ul>
+                            <li><a href="#" title="Instagram">Instagram</a></li>
+                            <li><a href="#" title="LinkedIn">LinkedIn</a></li>
+                            <li><a href="#" title="GitHub">GitHub</a></li>
+                        </ul>
                     </div>
                 </div>
 
-                <!-- Quick Links -->
-                <div class="footer-col">
-                    <h3>Platform Portal</h3>
-                    <ul>
-                        <li><a onclick="scrollToSection(event, 'hero')">Home Base</a></li>
-                        <li><a onclick="scrollToSection(event, 'gallery')">Visual Assets</a></li>
-                        <li><a onclick="scrollToSection(event, 'master-data')">Data Matrix</a></li>
-                        <li><a onclick="scrollToSection(event, 'dashboard')">Strategic Analytics</a></li>
-                    </ul>
+                <!-- Join Panel (Right Side) -->
+                <div class="sf-join">
+                    <h4>Join The Matrix</h4>
+                    <p>Get inspired with adventure reads, dream up your next trip with travel advice, and navigate offline data.</p>
+                    <button class="btn-solid" onclick="scrollToSection(event, 'contact')">Subscribe Now</button>
+                    <button class="btn-outline" onclick="scrollToSection(event, 'contact')">Sign In</button>
                 </div>
 
-                <!-- Contact & Creator -->
-                <div class="footer-col">
-                    <h3>Direct Connect</h3>
-                    <ul>
-                        <li><a onclick="scrollToSection(event, 'about')">Meet The Creator</a></li>
-                        <li><a href="https://wa.me/917505007905" target="_blank">WhatsApp Support</a></li>
-                        <li><a href="tel:+917505007905">Booking Helpline</a></li>
-                        <li><a href="mailto:vr123575@gmail.com">Business Email</a></li>
-                    </ul>
-                </div>
-
-                <!-- Newsletter -->
-                <div class="footer-col">
-                    <h3>Join The Matrix</h3>
-                    <p>Subscribe for the latest analytics, tourism trends, and platform updates.</p>
-                    <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Transmission Received! You are now subscribed to UK Analytics.');">
-                        <input type="email" placeholder="Enter your email address..." required>
-                        <button type="submit">Subscribe Now</button>
-                    </form>
-                </div>
             </div>
 
-            <!-- Copyright Bottom -->
-            <div class="footer-bottom">
-                <p>&copy; 2026 <span class="brand-highlight">UK Analytics Portal</span> | Engineered & Designed by <strong>Vinay Singh Rawat</strong></p>
+            <!-- Bottom Section: Copyright & Legal -->
+            <div class="sf-bottom">
+                <div class="sf-bottom-links">
+                    <a onclick="scrollToSection(event, 'contact')">Contact</a>
+                    <a onclick="scrollToSection(event, 'about')">Careers</a>
+                    <a href="#">Digital Archives</a>
+                    <a href="#">Licensing & Accolades</a>
+                    <a href="#">Sitemap</a>
+                </div>
+                <div class="sf-copyright">
+                    &copy; 2026 UK Analytics Portal | Engineered by Vinay Singh Rawat. Terms of Use & Privacy Policy.
+                </div>
             </div>
         </footer>
     </main>
@@ -801,7 +923,7 @@
     </div>
 
     <script>
-        // --- 1. ADVANCED SMOOTH SCROLL (FIXES THE "THROW TO BOTTOM" BUG) ---
+        // --- 1. ADVANCED SMOOTH SCROLL ---
         function scrollToSection(event, targetId) {
             event.preventDefault();
             closeNav(); 
@@ -812,10 +934,7 @@
                 const elementPosition = targetElement.getBoundingClientRect().top;
                 const offsetPosition = elementPosition + window.pageYOffset - headerHeight - 20;
 
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: "smooth"
-                });
+                window.scrollTo({ top: offsetPosition, behavior: "smooth" });
             }
         }
 
@@ -975,7 +1094,7 @@
             "kedarkantha": {
                 name: "केदारकांठा",
                 intro: "गोविंद पशु विहार नेशनल पार्क (उत्तरकाशी) में स्थित केदारकांठा में शिव का प्राचीन त्रिशूल स्थापित है।",
-                british: "ब्रिटिश काल में यह क्षेत्र लकड़ियों (Timber) के पारगमन के लिए जाना जाता था, लेकिन ट्रेकिंग का व्यावसायिक विकास हालদেশিক दशकों में हुआ।",
+                british: "ब्रिटिश काल में यह क्षेत्र लकड़ियों (Timber) के पारगमन के लिए जाना जाता था, लेकिन ट्रेकिंग का व्यावसायिक विकास हाल के दशकों में हुआ।",
                 famous: "सर्दियों में बर्फ से ढके पाइन के जंगलों और भारत के नंबर 1 'विंटर स्नो ट्रेक' के लिए सुप्रसिद्ध है।",
                 impact: "बेस कैंप 'सांकरी' गांव से ट्रेकिंग एजेंसियां, स्नो गियर रेंटल और ढाबा संचालकों की कमाई करोड़ों में होती है, जो स्थानीय अर्थव्यवस्था का आधार है।"
             },

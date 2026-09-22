@@ -21,8 +21,8 @@
             --glass-bg: rgba(10, 15, 30, 0.55); 
             --glass-border: rgba(255, 255, 255, 0.15);
             --neon-shadow: 0 0 20px rgba(0, 242, 254, 0.6);
-            --overlay-color: radial-gradient(circle, rgba(2,5,10,0.4) 0%, rgba(2,5,10,0.85) 100%);
-            --sidebar-width: 320px;
+            --overlay-color: radial-gradient(circle, rgba(2,5,10,0.5) 0%, rgba(2,5,10,0.9) 100%);
+            --sidebar-width: 300px;
         }
 
         [data-theme="light"] {
@@ -39,6 +39,12 @@
             --overlay-color: radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(241,245,249,0.85) 100%);
         }
 
+        /* 
+           FIX FOR SCROLLING ISSUE:
+           scroll-padding-top ensures anchor links stop exactly below the fixed header!
+        */
+        html { scroll-behavior: smooth; scroll-padding-top: 100px; }
+        
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
         body { color: var(--text-main); overflow-x: hidden; background-color: var(--bg-base); transition: 0.5s ease; }
 
@@ -57,7 +63,7 @@
         .bg-slider .slide:nth-child(4) { background-image: url('https://images.unsplash.com/photo-1610715936287-6c2ab208cbbf?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'); animation-delay: 18s; }
 
         @keyframes fadeBackground { 0% {opacity:0; transform:scale(1);} 10% {opacity:1;} 25% {opacity:1;} 35% {opacity:0; transform:scale(1.05);} 100% {opacity:0;} }
-        .bg-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--overlay-color); z-index: -1; backdrop-filter: blur(4px); transition: 0.5s ease; }
+        .bg-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--overlay-color); z-index: -1; backdrop-filter: blur(5px); transition: 0.5s ease; }
 
         /* ========================================================
            HEADER: TOP-LEFT HAMBURGER & THEME TOGGLE
@@ -194,6 +200,30 @@
         .contact-form button:hover { box-shadow: 0 0 20px rgba(37, 211, 102, 0.7); transform: translateY(-3px); }
 
         /* ========================================================
+           PREMIUM GLASSMORPHISM FOOTER
+           ======================================================== */
+        .glass-footer { background: var(--glass-bg); backdrop-filter: blur(30px); border-top: 1px solid var(--glass-border); padding: 70px 20px 20px 20px; margin-top: 100px; position: relative; z-index: 10; box-shadow: 0 -10px 40px rgba(0,0,0,0.4); }
+        .footer-content { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 50px; margin-bottom: 50px; }
+        .footer-col h2 { font-size: 2.2rem; color: var(--text-main); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; font-weight: 900; }
+        .footer-col h2 span { background: linear-gradient(45deg, var(--primary-glow), var(--accent-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: var(--neon-shadow); }
+        .footer-col h3 { color: var(--primary-glow); font-size: 1.4rem; margin-bottom: 25px; position: relative; padding-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .footer-col h3::after { content: ''; position: absolute; left: 0; bottom: 0; width: 60px; height: 3px; background: var(--accent-pink); box-shadow: 0 0 10px var(--accent-pink); border-radius: 5px; }
+        .footer-col p { color: var(--text-muted); line-height: 1.9; font-size: 1.1rem; text-align: justify; }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 18px; }
+        .footer-col ul li a { color: var(--text-muted); text-decoration: none; transition: 0.4s ease; font-size: 1.1rem; display: inline-flex; align-items: center; gap: 10px; cursor: pointer; }
+        .footer-col ul li a::before { content: '✦'; color: var(--accent-pink); font-size: 0.9rem; opacity: 0; transform: translateX(-10px); transition: 0.4s ease; }
+        .footer-col ul li a:hover { color: var(--primary-glow); transform: translateX(5px); text-shadow: var(--neon-shadow); }
+        .footer-col ul li a:hover::before { opacity: 1; transform: translateX(0); }
+        .newsletter-form { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
+        .newsletter-form input { padding: 16px; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.5); color: white; font-size: 1rem; outline: none; transition: 0.4s; }
+        .newsletter-form input:focus { border-color: var(--primary-glow); box-shadow: var(--neon-shadow); background: rgba(0, 242, 254, 0.1); }
+        .newsletter-form button { padding: 16px; background: linear-gradient(45deg, var(--primary-glow), var(--secondary-glow)); color: #000; border: none; border-radius: 10px; font-weight: bold; font-size: 1.1rem; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.4s; }
+        .newsletter-form button:hover { box-shadow: 0 0 25px rgba(0, 242, 254, 0.7); transform: translateY(-3px); color: white; }
+        .footer-bottom { text-align: center; padding-top: 25px; border-top: 1px solid var(--glass-border); color: var(--text-muted); font-size: 1rem; letter-spacing: 1px; }
+        .footer-bottom .brand-highlight { color: var(--primary-glow); font-weight: bold; text-shadow: var(--neon-shadow); }
+
+        /* ========================================================
            MODALS (HISTORY & IMAGES) MOBILE OPTIMIZED
            ======================================================== */
         .modal-overlay { display: none; position: fixed; z-index: 4000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); overflow-y: auto; padding: 20px 0; }
@@ -212,8 +242,6 @@
         .img-close-btn { position: fixed; top: 20px; right: 20px; color: white; font-size: 35px; cursor: pointer; z-index: 4001; background: var(--accent-pink); padding: 5px 20px; border-radius: 8px; transition: 0.4s; }
         .img-close-btn:hover { background: white; color: var(--accent-pink); box-shadow: 0 0 20px var(--accent-pink); }
 
-        footer { background: var(--glass-bg); backdrop-filter: blur(10px); text-align: center; padding: 30px 20px; border-top: 1px solid var(--glass-border); margin-top: 50px; }
-        
         /* MOBILE RESPONSIVE TWEAKS */
         @media screen and (max-width: 768px) {
             header { padding: 15px 20px; }
@@ -648,11 +676,6 @@
                         <a href="tel:+917505007905" class="call-btn">📞 Call Directly</a>
                         <a href="mailto:vr123575@gmail.com" class="email-btn">📧 vr123575@gmail.com</a>
                     </div>
-                    <div class="social-icons">
-                        <a href="#" title="Instagram">IG</a>
-                        <a href="#" title="LinkedIn">IN</a>
-                        <a href="#" title="GitHub">GH</a>
-                    </div>
                 </div>
                 <div class="about-card">
                     <h3>Tourism <span>Booking Portal</span></h3>
@@ -705,6 +728,62 @@
                 </div>
             </div>
         </section>
+
+        <!-- ========================================================
+             PREMIUM GLASSMORPHISM FOOTER
+             ======================================================== -->
+        <footer class="glass-footer">
+            <div class="footer-content">
+                <!-- Brand Column -->
+                <div class="footer-col">
+                    <h2>Explore <span>Uttarakhand</span></h2>
+                    <p>A data-driven initiative elevating the beauty, history, and local businesses of Devbhoomi into the digital world with a strong internet presence.</p>
+                    <div class="social-icons" style="justify-content: flex-start; margin-top: 20px;">
+                        <!-- Paste your links in the href="#" below -->
+                        <a href="#" title="Instagram">IG</a>
+                        <a href="#" title="LinkedIn">IN</a>
+                        <a href="#" title="GitHub">GH</a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="footer-col">
+                    <h3>Platform Portal</h3>
+                    <ul>
+                        <li><a onclick="scrollToSection(event, 'hero')">Home Base</a></li>
+                        <li><a onclick="scrollToSection(event, 'gallery')">Visual Assets</a></li>
+                        <li><a onclick="scrollToSection(event, 'master-data')">Data Matrix</a></li>
+                        <li><a onclick="scrollToSection(event, 'dashboard')">Strategic Analytics</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact & Creator -->
+                <div class="footer-col">
+                    <h3>Direct Connect</h3>
+                    <ul>
+                        <li><a onclick="scrollToSection(event, 'about')">Meet The Creator</a></li>
+                        <li><a href="https://wa.me/917505007905" target="_blank">WhatsApp Support</a></li>
+                        <li><a href="tel:+917505007905">Booking Helpline</a></li>
+                        <li><a href="mailto:vr123575@gmail.com">Business Email</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="footer-col">
+                    <h3>Join The Matrix</h3>
+                    <p>Subscribe for the latest analytics, tourism trends, and platform updates.</p>
+                    <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Transmission Received! You are now subscribed to UK Analytics.');">
+                        <input type="email" placeholder="Enter your email address..." required>
+                        <button type="submit">Subscribe Now</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Copyright Bottom -->
+            <div class="footer-bottom">
+                <p>&copy; 2026 <span class="brand-highlight">UK Analytics Portal</span> | Engineered & Designed by <strong>Vinay Singh Rawat</strong></p>
+            </div>
+        </footer>
     </main>
 
     <!-- MODALS SECTION -->
@@ -725,11 +804,10 @@
         // --- 1. ADVANCED SMOOTH SCROLL (FIXES THE "THROW TO BOTTOM" BUG) ---
         function scrollToSection(event, targetId) {
             event.preventDefault();
-            closeNav(); // Close sidebar if open
+            closeNav(); 
             
             const targetElement = document.getElementById(targetId);
             if(targetElement) {
-                // Get header height dynamically
                 const headerHeight = document.getElementById("main-header").offsetHeight;
                 const elementPosition = targetElement.getBoundingClientRect().top;
                 const offsetPosition = elementPosition + window.pageYOffset - headerHeight - 20;
@@ -897,7 +975,7 @@
             "kedarkantha": {
                 name: "केदारकांठा",
                 intro: "गोविंद पशु विहार नेशनल पार्क (उत्तरकाशी) में स्थित केदारकांठा में शिव का प्राचीन त्रिशूल स्थापित है।",
-                british: "ब्रिटिश काल में यह क्षेत्र लकड़ियों (Timber) के पारगमन के लिए जाना जाता था, लेकिन ट्रेकिंग का व्यावसायिक विकास हाल के दशकों में हुआ।",
+                british: "ब्रिटिश काल में यह क्षेत्र लकड़ियों (Timber) के पारगमन के लिए जाना जाता था, लेकिन ट्रेकिंग का व्यावसायिक विकास हालদেশিক दशकों में हुआ।",
                 famous: "सर्दियों में बर्फ से ढके पाइन के जंगलों और भारत के नंबर 1 'विंटर स्नो ट्रेक' के लिए सुप्रसिद्ध है।",
                 impact: "बेस कैंप 'सांकरी' गांव से ट्रेकिंग एजेंसियां, स्नो गियर रेंटल और ढाबा संचालकों की कमाई करोड़ों में होती है, जो स्थानीय अर्थव्यवस्था का आधार है।"
             },
